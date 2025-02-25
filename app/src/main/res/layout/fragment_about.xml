@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center_horizontal">
+
+        <!-- כותרת גדולה ומודגשת -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="✨ המקום שבו האומנות והמקצועיות נפגשות!"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:paddingBottom="12dp"/>
+
+        <!-- כותרת משנית מודגשת -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="במספרה שלנו, אנו מאמינים כי תספורת טובה היא הרבה מעבר לגזירת שיער. היא דרך לבטא את עצמך, להרגיש בטוח ולהיות הכי טוב שתוכל."
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="right"
+            android:lineSpacingExtra="6dp"
+            android:paddingBottom="12dp"/>
+
+        <!-- פסקת תוכן -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="אצלנו תקבלו יחס אישי ומקצועי, תוך שימוש בטכניקות חדשניות והתאמה אישית לכל לקוח. הצוות המקצועי שלנו מחזיק בניסיון עשיר וידאג להתאים לך את התספורת המושלמת."
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:gravity="right"
+            android:lineSpacingExtra="6dp"
+            android:paddingBottom="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="השירותים שלנו כוללים מגוון רחב של תספורות, צבעים, טיפולי החלקה ושיקום שיער, הכל ברמה הגבוהה ביותר!"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:gravity="right"
+            android:lineSpacingExtra="6dp"
+            android:paddingBottom="10dp"/>
+
+        <!-- טקסט נוסף שמסכם -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="נשמח לראות אותך אצלנו! קביעת תור בקלות ובמהירות דרך האפליקציה."
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:textColor="@color/black"
+            android:gravity="right"
+            android:lineSpacingExtra="6dp"
+            android:paddingBottom="16dp"/>
+
+        <!-- כפתור חזרה -->
+        <Button
+            android:id="@+id/btn_back_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔙 חזור"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/black"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+</ScrollView>

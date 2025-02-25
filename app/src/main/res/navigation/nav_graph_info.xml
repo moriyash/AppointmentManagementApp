@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/aboutFragment">
+
+    <!-- עמוד קצת עלינו -->
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.queuemanagementapp.Fragments.AboutFragment"
+        android:label="קצת עלינו"
+        tools:layout="@layout/fragment_about" />
+
+    <!-- עמוד שעות פתיחה -->
+    <fragment
+        android:id="@+id/openingHoursFragment"
+        android:name="com.example.queuemanagementapp.Fragments.OpeningHoursFragment"
+        android:label="שעות פתיחה"
+        tools:layout="@layout/fragment_opening_hours" />
+
+    <!-- עמוד התורים שלי -->
+    <fragment
+        android:id="@+id/myAppointmentsFragment"
+        android:name="com.example.queuemanagementapp.Fragments.AppointmentsListLoginFragment"
+        android:label="התורים שלי"
+        tools:layout="@layout/fragment_my_appointments">
+        <action
+            android:id="@+id/action_myAppointmentsFragment_to_appointmentsListFragment"
+            app:destination="@id/appointmentsListFragment" />
+    </fragment>
+
+    <!-- עמוד רשימת התורים -->
+    <fragment
+        android:id="@+id/appointmentsListFragment"
+        android:name="com.example.queuemanagementapp.Fragments.AppointmentsListFragment"
+        android:label="רשימת התורים"
+        tools:layout="@layout/fragment_appointments_list">
+        <argument
+            android:name="phoneNumber"
+            app:argType="string" />
+    </fragment>
+
+    <!-- עמוד LoginReview – כניסה לביקורות -->
+    <fragment
+        android:id="@+id/loginReviewFragment"
+        android:name="com.example.queuemanagementapp.Fragments.LoginReviewFragment"
+        android:label="כניסה לביקורות"
+        tools:layout="@layout/fragment_login_review">
+        <action
+            android:id="@+id/action_loginReviewFragment_to_reviewsFragment"
+            app:destination="@id/reviewsFragment" />
+    </fragment>
+
+    <!-- עמוד ביקורות -->
+    <fragment
+        android:id="@+id/reviewsFragment"
+        android:name="com.example.queuemanagementapp.Fragments.ReviewFragment"
+        android:label="ביקורות"
+        tools:layout="@layout/fragment_reviews" />
+
+</navigation>

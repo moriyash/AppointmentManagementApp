@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/enterPhoneFragment"> <!-- העמוד הראשון יהיה הכנסת מספר טלפון -->
+
+    <!-- עמוד הזנת טלפון -->
+    <fragment
+        android:id="@+id/enterPhoneFragment"
+        android:name="com.example.queuemanagementapp.Fragments.EnterPhoneFragment"
+        android:label="הזנת טלפון"
+        tools:layout="@layout/fragment_enter_phone">
+        <action
+            android:id="@+id/action_enterPhoneFragment_to_selectServiceFragment"
+            app:destination="@id/selectServiceFragment"/>
+    </fragment>
+
+    <!-- עמודים נוספים של קביעת תור -->
+    <fragment
+        android:id="@+id/selectServiceFragment"
+        android:name="com.example.queuemanagementapp.Fragments.SelectServiceFragment"
+        android:label="בחירת שירות"
+        tools:layout="@layout/fragment_select_service">
+        <action
+            android:id="@+id/action_selectServiceFragment_to_selectDateFragment"
+            app:destination="@id/selectDateFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/selectDateFragment"
+        android:name="com.example.queuemanagementapp.Fragments.SelectDateFragment"
+        android:label="בחירת תאריך ושעה"
+        tools:layout="@layout/fragment_select_date">
+        <action
+            android:id="@+id/action_selectDateFragment_to_confirmAppointmentFragment"
+            app:destination="@id/confirmAppointmentFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/confirmAppointmentFragment"
+        android:name="com.example.queuemanagementapp.Fragments.ConfirmAppointmentFragment"
+        android:label="אישור תור"
+        tools:layout="@layout/fragment_confirm_appointment">
+        <!-- אין צורך ב-action לעמוד סיכום תור (finalAppointmentFragment) -->
+    </fragment>
+
+
+
+
+</navigation>

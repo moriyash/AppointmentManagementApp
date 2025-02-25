@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center_horizontal">
+
+        <!-- כותרת העמוד -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="התורים שלי"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingBottom="16dp"/>
+
+        <!-- תיבת הזנת מספר טלפון -->
+        <EditText
+            android:id="@+id/edt_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="הכנס מספר טלפון"
+            android:inputType="phone"
+            android:backgroundTint="@color/warm_beige"
+
+            android:padding="10dp"
+            android:textSize="20sp"
+
+            android:background="@android:drawable/editbox_background"/>
+
+        <!-- כפתור הצגת תורים -->
+        <Button
+            android:id="@+id/btn_view_appointments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/warm_beige"
+            android:padding="8dp"
+            android:text="הצג תורים"
+            android:textColor="@color/black" />
+
+        <!-- רשימת התורים -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_appointments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:visibility="gone"/>
+
+        <!-- כפתור חזרה -->
+        <Button
+            android:id="@+id/btn_back_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔙 חזור"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/black"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+</ScrollView>

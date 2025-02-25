@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="בחר שירות:"
+        android:textSize="18sp"
+        android:textColor="@color/warm_brown"
+        android:textStyle="bold"
+        android:paddingBottom="8dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <RadioGroup
+                android:id="@+id/radio_group_services"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+            <!-- תיבת טקסט להזנת שירות חופשי (מופיעה רק אם בוחרים "אחר") -->
+            <EditText
+                android:id="@+id/edit_text_other_service"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="הקלד שירות אחר..."
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:padding="8dp" />
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/warm_beige"
+        android:padding="8dp"
+        android:text="המשך"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🔙 חזור"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>

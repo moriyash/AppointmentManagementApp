@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    android:scrollbarSize="10dp">
+
+    <!-- Text view to display the selected date -->
+    <TextView
+        android:id="@+id/selected_date_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="תאריך תור"
+        android:textSize="20sp"
+        android:textColor="@color/warm_brown" />
+    />
+
+    <!-- Button to pick the date -->
+    <Button
+        android:id="@+id/btn_pick_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/warm_beige"
+        android:padding="8dp"
+        android:text="בחר תאריך"
+        android:textColor="@color/black" />
+
+    <!-- Spinner for choosing the time -->
+    <Spinner
+        android:id="@+id/time_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:minHeight="48dp" />
+
+
+    <!-- Progress Bar for loading -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+    <!-- Next button to navigate to the next fragment -->
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/warm_beige"
+        android:padding="8dp"
+        android:text="המשך"
+        android:textColor="@color/black" />
+
+    <!-- Back button to navigate to the previous fragment -->
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🔙 חזור"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>

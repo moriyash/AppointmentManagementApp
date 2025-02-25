@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/et_admin_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="אימייל"
+        android:inputType="textEmailAddress"
+        android:backgroundTint="@color/warm_beige"
+
+        android:minHeight="48dp" />
+
+    <EditText
+        android:id="@+id/et_admin_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="סיסמה"
+        android:inputType="textPassword"
+        android:backgroundTint="@color/warm_beige"
+
+        android:minHeight="48dp" />
+
+    <Button
+        android:id="@+id/btn_admin_login_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="התחבר"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/warm_beige"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"/>
+    <Button
+        android:id="@+id/btn_main_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🔙 חזור"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"/>
+
+
+</LinearLayout>
