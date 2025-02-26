@@ -88,7 +88,7 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
         }
 
         String appointmentId = parts[1].trim(); // מזהה התור
-
+        appointmentId = appointmentId.charAt(0) + "";
         // יצירת נתיב למחיקת התור
         DatabaseReference appointmentRef = databaseReference.child(phoneNumber).child(appointmentId);
 
