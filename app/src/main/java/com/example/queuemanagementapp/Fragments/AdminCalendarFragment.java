@@ -317,10 +317,9 @@ public class AdminCalendarFragment extends Fragment {
     private void sendNotificationToUser(String phoneNumber) {
         DatabaseReference notificationsRef = FirebaseDatabase.getInstance().getReference("notifications").child(phoneNumber);
         String notificationId = notificationsRef.push().getKey();
-
+        String notificationKey = "status";
         if (notificationId != null) {
-            notificationsRef.child(notificationId).setValue("🚫 התור שלך בוטל עקב חופשה/מחלה");
-        }
+            notificationsRef.child(notificationKey).setValue("🚫 התור שלך בוטל עקב חופשה/מחלה");        }
 
         // 🔽 עדכון סטטוס כל התורים של המשתמש שבוטלו
         DatabaseReference userAppointmentsRef = FirebaseDatabase.getInstance().getReference("appointments").child(phoneNumber);
