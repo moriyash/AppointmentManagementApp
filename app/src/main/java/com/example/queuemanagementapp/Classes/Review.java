@@ -1,13 +1,13 @@
 package com.example.queuemanagementapp.Classes;
 
 public class Review {
-    public String phoneNumber;     // מספר הטלפון של המשתמש
-    public String reviewerName;    // שם המשתמש או "משתמש אנונימי"
-    public String reviewContent;   // תוכן הביקורת
+    public String phoneNumber;     //phone user
+    public String reviewerName;    // username
+    public String reviewContent;   // content of review
     public String date;            // תאריך הביקורת בפורמט dd/MM/yyyy
-    public float rating;           // דירוג (float)
+    public float rating;           // rate
 
-    // קונסטרקטור ריק נדרש ל-Firebase
+
     public Review() {}
 
     public Review(String phoneNumber, String reviewerName, float rating, String reviewContent, String date) {

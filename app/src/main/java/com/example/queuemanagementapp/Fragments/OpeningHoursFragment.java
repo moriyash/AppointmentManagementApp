@@ -16,7 +16,6 @@ public class OpeningHoursFragment extends Fragment {
 
     private Button btnBackMainHours;
     public OpeningHoursFragment() {
-        // בנאי ריק (נדרש על ידי Android)
     }
 
     @Nullable

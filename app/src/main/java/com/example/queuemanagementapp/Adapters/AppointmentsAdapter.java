@@ -73,26 +73,35 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
         }
     }
 
-    /**
-     * פונקציה למחיקת תור מה-Firebase.
-     */
+
     private void cancelAppointment(String appointmentKey, int position, View view) {
-        // שינוי פורמט המפתח כדי להתאים לשמות בפיירבייס
-        String fixedAppointmentKey = appointmentKey.replace(" | שעה ", "_"); // הפיכת התצוגה לפורמט שמור בפיירבייס
+        if (appointmentKey == null || appointmentKey.isEmpty()) {
+            Log.e("FirebaseDelete", "❌ מזהה התור ריק או null! לא ניתן לבצע מחיקה.");
+            Toast.makeText(view.getContext(), "שגיאה: לא ניתן למצוא את התור למחיקה!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // הפנייה לנתיב המדויק בפיירבייס
-        DatabaseReference appointmentRef = databaseReference.child(phoneNumber).child(fixedAppointmentKey);
+        // המזהה האמיתי של התור (1, 2, 3...) - צריך לחלץ אותו
+        String[] parts = appointmentKey.split("#");
+        if (parts.length < 2) {
+            Log.e("FirebaseDelete", "❌ פורמט מזהה תור שגוי! ערך שהתקבל: " + appointmentKey);
+            Toast.makeText(view.getContext(), "שגיאה: לא ניתן למחוק את התור!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        Log.d("FirebaseDelete", "🗑️ מנסה למחוק את התור בנתיב: " + appointmentRef.toString());
+        String appointmentId = parts[1].trim(); // המזהה המספרי של התור (1,2,3...)
+
+        // יצירת נתיב למחיקת התור
+        DatabaseReference appointmentRef = databaseReference.child(phoneNumber).child(appointmentId);
+        Log.d("FirebaseDelete", "📌 הנתיב למחיקה: " + appointmentRef.toString());
 
         // בדיקה אם התור קיים לפני המחיקה
         appointmentRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("FirebaseCheck", "📌 נתונים שהתקבלו: " + snapshot.getValue());
-
                 if (snapshot.exists()) {
                     Log.d("FirebaseDelete", "✅ התור נמצא, ממשיך למחיקה...");
+
                     appointmentRef.removeValue().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Log.d("FirebaseDelete", "✅ התור נמחק בהצלחה!");
@@ -120,4 +129,6 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
             }
         });
     }
+
+
 }

@@ -28,7 +28,7 @@ public class AdminLoginFragment extends Fragment {
     private static final String ADMIN_PASSWORD = "hair1234";
 
     public AdminLoginFragment() {
-        // קונסטרקטור ריק חובה
+
     }
 
     @Nullable
@@ -60,7 +60,7 @@ public class AdminLoginFragment extends Fragment {
             }
         });
 
-        // חזרה לעמוד הראשי
+        //back to the mainactivity
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  // חזרה לעמוד הראשי עם סגירת הפרגמנט הנוכחי

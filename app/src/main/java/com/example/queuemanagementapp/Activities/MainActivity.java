@@ -28,15 +28,14 @@ public class MainActivity extends AppCompatActivity {
     private FragmentContainerView navHostFragmentInfo;
     private FragmentContainerView navHostFragmentadmin;
 
-    private Button btnAdminLogin;  // כפתור כניסת מנהל
-    private Button btnBookAppointment;  // כפתור כניסת מנהל
-
-    private Button btnAbout;  // כפתור כניסת מנהל
-
-    private Button btnOpeningHours;  // כפתור כניסת מנהל
-
-    private Button btnMyAppointments; //התורים שלי
-    private Button btnReviews; // ביקורות
+    private Button btnAdminLogin;
+    private Button btnBookAppointment; //make an appointment
+    private Button btnAbout;
+    private Button btnOpeningHours;
+    private Button btnMyAppointments;
+    private Button btnReviews;
+    private Button dialButton; //call
+    private Button btnOpenMaps; //maps
 
 
     @Override
@@ -44,18 +43,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // אתחול משתני ה-XML
-        mainContent = findViewById(R.id.main_content);
+
         navHostFragment = findViewById(R.id.nav_host_fragment);
         navHostFragmentInfo = findViewById(R.id.nav_host_fragment_info);
         navHostFragmentadmin = findViewById(R.id.nav_host_fragment_admin);
 
+        // אתחול משתני ה-XML
+        mainContent = findViewById(R.id.main_content);
         btnBookAppointment = findViewById(R.id.btn_book_appointment);
         btnAbout = findViewById(R.id.btn_about);
         btnOpeningHours = findViewById(R.id.btn_opening_hours);
         btnMyAppointments = findViewById(R.id.btn_my_appointments);
         btnAdminLogin = findViewById(R.id.btn_admin_login);
         btnReviews= findViewById(R.id.btnReviews);
+        btnOpenMaps = findViewById(R.id.btn_open_maps);
+        dialButton = findViewById(R.id.dial_button);
+
+
+
         // אתחול הניווט הראשי
         NavHostFragment navHostMain = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
@@ -77,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        // אתחול גלריית תמונות
+        //gallery pictures
         RecyclerView recyclerGallery = findViewById(R.id.recycler_gallery);
         recyclerGallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         List<Integer> galleryImages = new ArrayList<>();
@@ -95,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         GalleryAdapter galleryAdapter = new GalleryAdapter(galleryImages);
         recyclerGallery.setAdapter(galleryAdapter);
 
-        // אתחול רשימת טיפולים ומחירים
+        //gallery services
         RecyclerView recyclerServices = findViewById(R.id.recycler_services);
         recyclerServices.setLayoutManager(new LinearLayoutManager(this));
         List<String> services = new ArrayList<>();
@@ -139,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 navControllerInfo.navigate(R.id.myAppointmentsFragment);
             }
         });
+        // ניווט ללחצן "ביקורות"
 
         btnReviews.setOnClickListener(v -> {
             mainContent.setVisibility(View.GONE);
@@ -157,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 navController.navigate(R.id.enterPhoneFragment);
             }
         });
+
         // חיבור לכפתור כניסת מנהל
 
         btnAdminLogin.setOnClickListener(v -> {
@@ -166,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 navControllerAdmin.navigate(R.id.adminLoginFragment);
             }
         });
-        Button dialButton = findViewById(R.id.dial_button);
+        // button for calling
         dialButton.setOnClickListener(v -> {
             String phoneNumber = "0534210224"; // המספר שברצונך לחייג אליו
             Intent dialIntent = new Intent(Intent.ACTION_DIAL);
@@ -174,13 +181,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(dialIntent);
         });
 
-
-
-
-
-        Button btnOpenMaps = findViewById(R.id.btn_open_maps);
+        // adress maps
         btnOpenMaps.setText("📍 רחוב דיזנגוף 280, תל אביב יפו, ישראל");
-
         btnOpenMaps.setOnClickListener(v -> {
             String address = "רחוב דיזנגוף 280, תל אביב יפו, ישראל"; // כתובת העסק
             Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(address)); // יצירת URI לפתיחת הכתובת במפות

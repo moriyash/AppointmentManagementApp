@@ -21,7 +21,6 @@ public class AppointmentsListLoginFragment extends Fragment {
     private Button btnBackMain,btnViewAppointments;
 
     public AppointmentsListLoginFragment() {
-        // קונסטרקטור ריק חובה
     }
 
     @Nullable
@@ -29,7 +28,7 @@ public class AppointmentsListLoginFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_appointments, container, false);
 
-        // אתחול רכיבים
+
         edtPhoneNumber = view.findViewById(R.id.edt_phone_number);
         btnViewAppointments = view.findViewById(R.id.btn_view_appointments);
         btnBackMain = view.findViewById(R.id.btn_back_main);
@@ -52,7 +51,7 @@ public class AppointmentsListLoginFragment extends Fragment {
             Navigation.findNavController(v).navigate(R.id.action_myAppointmentsFragment_to_appointmentsListFragment, bundle);
         });
 
-        // כפתור חזרה לעמוד הראשי
+        // back to the mainactivity
         btnBackMain.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

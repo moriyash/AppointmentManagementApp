@@ -2,6 +2,7 @@ package com.example.queuemanagementapp.Fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,7 +18,9 @@ import com.example.queuemanagementapp.Activities.MainActivity;
 import com.example.queuemanagementapp.R;
 import com.google.firebase.database.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class AdminCalendarFragment extends Fragment {
     private TextView selectedDateText;
@@ -110,6 +113,54 @@ public class AdminCalendarFragment extends Fragment {
         });
     }
 
+    private void showTimePicker(String date, String dayType) {
+        Calendar calendar = Calendar.getInstance();
+
+        // בחירת שעת התחלה
+        TimePickerDialog startPicker = new TimePickerDialog(getContext(), (view, startHour, startMinute) -> {
+            String startTime = String.format("%02d:%02d", startHour, startMinute);
+
+            // בחירת שעת סיום אחרי שעת ההתחלה
+            TimePickerDialog endPicker = new TimePickerDialog(getContext(), (view2, endHour, endMinute) -> {
+                String endTime = String.format("%02d:%02d", endHour, endMinute);
+
+                // ✅ שמירת השעות החדשות במסד הנתונים
+                String workingHours = startTime + " - " + endTime;
+                databaseReference.child(date).child("type").setValue(dayType);
+                databaseReference.child(date).child("hours").setValue(workingHours);
+
+                Toast.makeText(getContext(), "✅ שעות העבודה נשמרו: " + workingHours, Toast.LENGTH_SHORT).show();
+
+                // ✅ קריאה לפונקציה שמעדכנת את שעות העבודה של הלקוחות!
+                updateClientWorkingHours(date, workingHours);
+
+            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+
+            endPicker.setTitle("בחר שעת סיום");
+            endPicker.show();
+
+        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+
+        startPicker.setTitle("בחר שעת התחלה");
+        startPicker.show();
+    }
+
+
+    private List<String> generateValidTimeSlots(String workingHours) {
+        List<String> slots = new ArrayList<>();
+        String[] hoursSplit = workingHours.split(" - ");
+
+        if (hoursSplit.length == 2) {
+            int start = Integer.parseInt(hoursSplit[0].split(":")[0]);
+            int end = Integer.parseInt(hoursSplit[1].split(":")[0]);
+
+            for (int i = start; i < end; i++) {
+                slots.add(String.format("%02d:00", i));
+            }
+        }
+        return slots;
+    }
+
     private void showDayTypeDialog() {
         String[] dayTypes = {"יום חופשה", "יום מחלה", "שעות עבודה", "בטל שינוי"};
 
@@ -120,12 +171,57 @@ public class AdminCalendarFragment extends Fragment {
 
                     if (selectedDayType.equals("יום חופשה") || selectedDayType.equals("יום מחלה")) {
                         saveDayTypeToFirebase(selectedDate, selectedDayType, "");
+                    } else if (selectedDayType.equals("שעות עבודה")) {
+                        // ✅ כאן קוראים לפונקציה שתפתח את תיבת הבחירה לשעות העבודה
+                        showTimePicker(selectedDate, selectedDayType);
                     } else if (selectedDayType.equals("בטל שינוי")) {
                         removeDayTypeFromFirebase(selectedDate);
                     }
                 });
         builder.create().show();
     }
+    private void updateClientWorkingHours(String date, String workingHours) {
+        DatabaseReference clientsRef = FirebaseDatabase.getInstance().getReference("appointments");
+
+        clientsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean hasChanges = false; // לבדוק אם בוצעו שינויים
+
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot appointmentSnapshot : userSnapshot.getChildren()) {
+                        String appointmentDate = appointmentSnapshot.child("date").getValue(String.class);
+                        String appointmentTime = appointmentSnapshot.child("time").getValue(String.class);
+
+                        if (appointmentDate != null && appointmentDate.equals(date)) {
+                            List<String> validTimes = generateValidTimeSlots(workingHours);
+
+                            if (!validTimes.contains(appointmentTime)) {
+                                // ביטול תורים שלא תואמים לשעות החדשות
+                                appointmentSnapshot.getRef().child("status").setValue("🚫 בוטל עקב שינוי שעות עבודה");
+                                hasChanges = true;
+                            }
+                        }
+                    }
+                }
+
+                // שמירת השעות החדשות גם ב-`workdays`
+                databaseReference.child(date).child("hours").setValue(workingHours);
+
+                if (hasChanges) {
+                    Toast.makeText(getContext(), "📅 התורים שלא התאימו לשעות החדשות בוטלו.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "⚠ שגיאה בעדכון שעות העבודה ללקוחות.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
 
     private void saveDayTypeToFirebase(String date, String dayType, String hours) {
         databaseReference.child(date).child("type").setValue(dayType);
@@ -188,16 +284,22 @@ public class AdminCalendarFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    String userPhone = userSnapshot.getKey(); // שליפת מספר הטלפון של המשתמש
+
+                    boolean hasCanceledAppointments = false; // נבדוק אם יש ביטולים
+
                     for (DataSnapshot appointmentSnapshot : userSnapshot.getChildren()) {
                         String appointmentDate = appointmentSnapshot.child("date").getValue(String.class);
 
                         if (appointmentDate != null && appointmentDate.equals(date)) {
                             appointmentSnapshot.getRef().child("status").setValue("🚫 בוטל עקב חופשה/מחלה");
-
-                            // שליחת התראה למשתמש שהתור שלו בוטל
-                            String userPhone = userSnapshot.getKey();
-                            sendNotificationToUser(userPhone);
+                            hasCanceledAppointments = true;
                         }
+                    }
+
+                    // אם המשתמש איבד תור, שלח לו התראה
+                    if (hasCanceledAppointments) {
+                        sendNotificationToUser(userPhone);
                     }
                 }
             }
@@ -209,6 +311,9 @@ public class AdminCalendarFragment extends Fragment {
         });
     }
 
+    /**
+     * שליחת הודעה למשתמש שהתור שלו בוטל
+     */
     private void sendNotificationToUser(String phoneNumber) {
         DatabaseReference notificationsRef = FirebaseDatabase.getInstance().getReference("notifications").child(phoneNumber);
         String notificationId = notificationsRef.push().getKey();
@@ -216,5 +321,5 @@ public class AdminCalendarFragment extends Fragment {
         if (notificationId != null) {
             notificationsRef.child(notificationId).setValue("🚫 התור שלך בוטל עקב חופשה/מחלה");
         }
-    }
-}
+    }}
+

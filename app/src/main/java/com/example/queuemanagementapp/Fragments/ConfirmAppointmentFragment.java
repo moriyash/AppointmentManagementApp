@@ -14,8 +14,10 @@ import androidx.fragment.app.Fragment;
 import com.example.queuemanagementapp.Activities.MainActivity;
 import com.example.queuemanagementapp.R;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -79,27 +81,39 @@ public class ConfirmAppointmentFragment extends Fragment {
     }
 
     private void saveAppointment(String phoneNumber, View view) {
-        String appointmentId = selectedDate + "_" + selectedTime; // מזהה ייחודי לכל תור
+        DatabaseReference userAppointmentsRef = database.getReference("appointments").child(phoneNumber);
 
-        // יצירת נתוני התור
-        Map<String, Object> appointment = new HashMap<>();
-        appointment.put("phone", phoneNumber);
-        appointment.put("date", selectedDate);
-        appointment.put("time", selectedTime);
-        appointment.put("service", selectedService);
+        userAppointmentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int nextAppointmentNumber = (int) snapshot.getChildrenCount() + 1; // מספר התור הבא
 
-        // שמירה ב-Firebase
-        DatabaseReference appointmentRef = database.getReference("appointments").child(phoneNumber).child(appointmentId);
-        appointmentRef.setValue(appointment)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(getContext(), "התור נשמר בהצלחה!", Toast.LENGTH_SHORT).show();
+                String appointmentKey = String.valueOf(nextAppointmentNumber); // קביעת מספר סידורי לתור
 
-                    // יצירת Intent לעמוד הראשי (MainActivity)
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  // לוודא שכל ה-Activities הקודמים ייסגרו
-                    startActivity(intent); // הפעלת ה-Activity
-                    requireActivity().finish(); // מסיים את ה-Activity הנוכחי
-                })
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "שגיאה בשמירת התור", Toast.LENGTH_SHORT).show());
+                DatabaseReference appointmentRef = userAppointmentsRef.child(appointmentKey);
+
+                Map<String, Object> appointment = new HashMap<>();
+                appointment.put("phone", phoneNumber);
+                appointment.put("date", selectedDate);
+                appointment.put("time", selectedTime);
+                appointment.put("service", selectedService);
+
+                appointmentRef.setValue(appointment)
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(getContext(), "✅ התור נשמר בהצלחה!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            requireActivity().finish();
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(getContext(), "❌ שגיאה בשמירת התור", Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "⚠ שגיאה בגישה ל-Firebase.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 }

@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="בחר תאריך"
-        android:backgroundTint="@color/warm_beige" />
+        android:backgroundTint="@color/warm_brown" />
     <Button
         android:id="@+id/btn_confirm_day_type"
         android:layout_width="wrap_content"

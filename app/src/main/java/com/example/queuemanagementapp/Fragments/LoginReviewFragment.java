@@ -86,9 +86,7 @@ public class LoginReviewFragment extends Fragment {
         return view;
     }
 
-    /**
-     * פונקציה שמסירה את הקידומת ושומרת את המספר בפורמט תקין (05XXXXXXXX)
-     */
+
     private String cleanPhoneNumber(String phone) {
         if (phone.startsWith("+972")) {
             return "0" + phone.substring(4);

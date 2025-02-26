@@ -64,30 +64,31 @@ public class AppointmentsListFragment extends Fragment {
     }
 
     private void loadAppointmentsFromFirebase(String phone) {
-        Log.d("FirebaseData", "מחפש תורים למספר: " + phone);
+        Log.d("FirebaseData", "🔎 מחפש תורים למספר: " + phone);
 
-        appointmentsReference.child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
+        appointmentsReference.child(phone).addValueEventListener(new ValueEventListener() { // מאזין קבוע!
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<String> appointmentsList = new ArrayList<>();
 
                 if (!snapshot.exists()) {
-                    Log.d("FirebaseData", "לא נמצאו תורים במסד הנתונים.");
                     Toast.makeText(getContext(), "אין תורים זמינים למספר זה", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 for (DataSnapshot appointmentSnapshot : snapshot.getChildren()) {
+                    String appointmentId = appointmentSnapshot.getKey(); // מזהה התור (1,2,3...)
                     String date = appointmentSnapshot.child("date").getValue(String.class);
                     String time = appointmentSnapshot.child("time").getValue(String.class);
+                    String service = appointmentSnapshot.child("service").getValue(String.class);
                     String status = appointmentSnapshot.child("status").getValue(String.class);
 
                     if (date != null && time != null) {
-                        String appointmentText = "📅 תאריך: " + date + " | ⏰ שעה: " + time;
+                        String appointmentText = "📅 תאריך: " + date + " | ⏰ שעה: " + time + " | 🆔 תור #" + appointmentId;
 
-                        // הוספת אינדיקציה אם התור בוטל
-                        if (status != null && status.equals("בוטל עקב חופשה/מחלה")) {
-                            appointmentText += " (🚫 התור בוטל עקב חופשה/מחלה)";
+                        // אם התור בוטל - נוסיף התראה מיוחדת
+                        if (status != null && status.trim().equalsIgnoreCase("בוטל עקב חופשה/מחלה")) {
+                            appointmentText += " (🚫 התור בוטל על ידי העסק!)";
                         }
 
                         appointmentsList.add(appointmentText);
@@ -95,11 +96,9 @@ public class AppointmentsListFragment extends Fragment {
                 }
 
                 if (appointmentsList.isEmpty()) {
-                    Log.d("FirebaseData", "רשימת התורים ריקה.");
                     Toast.makeText(getContext(), "לא נמצאו תורים למספר זה", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d("FirebaseData", "סה\"כ תורים שנמצאו: " + appointmentsList.size());
-
+                    // עדכון הרשימה
                     appointmentsAdapter = new AppointmentsAdapter(appointmentsList, phoneNumber, appointmentsReference);
                     recyclerAppointments.setAdapter(appointmentsAdapter);
                     recyclerAppointments.setVisibility(View.VISIBLE);
@@ -108,9 +107,10 @@ public class AppointmentsListFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("FirebaseError", "שגיאה בבדיקת התורים: " + error.getMessage());
                 Toast.makeText(getContext(), "שגיאה בטעינת התורים", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
 }

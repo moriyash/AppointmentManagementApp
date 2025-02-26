@@ -35,9 +35,7 @@ public class SelectDateFragment extends Fragment {
     private boolean isDateBlocked = false;
     private List<String> availableTimes, bookedTimes;
 
-    public SelectDateFragment() {
-        // קונסטרקטור ריק חובה
-    }
+    public SelectDateFragment() {}
 
     @Nullable
     @Override
@@ -76,27 +74,16 @@ public class SelectDateFragment extends Fragment {
         return view;
     }
 
-    /**
-     * בדיקה האם תאריך מסוים הוא שבת
-     */
     private boolean isSaturday(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
         return calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
     }
 
-    /**
-     * בדיקה האם תאריך מסוים הוא יום שישי
-     */
-    private boolean isFriday(int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-        return calendar.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
-    }
 
-    /**
-     * פתיחת לוח השנה ובדיקת תאריך קיים
-     */
+
+
+
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -108,31 +95,140 @@ public class SelectDateFragment extends Fragment {
                 Toast.makeText(getContext(), "🚫 אין קביעת תורים בשבת. אנא בחר יום אחר.", Toast.LENGTH_SHORT).show();
             } else {
                 selectedDate = formatDate(selectedDay, selectedMonth + 1, selectedYear);
-                checkIfDateIsBlocked(selectedDate, selectedYear, selectedMonth, selectedDay);
+
+                // ✅ קריאה לפיירבייס לבדוק אם יש שעות מותאמות אישית
+                workdaysReference.child(selectedDate).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String workingHours;
+
+                        if (snapshot.exists() && snapshot.child("hours").exists()) {
+                            // ✅ אם יש שעות בפיירבייס, נקבל אותן
+                            workingHours = snapshot.child("hours").getValue(String.class);
+                        } else {
+                            // ⏳ אם אין נתונים בפיירבייס, השתמש בשעות ברירת מחדל
+                            workingHours = getDefaultWorkingHours(selectedYear, selectedMonth, selectedDay);
+                        }
+
+                        // טוען את השעות לספינר
+                        loadAvailableTimes(selectedDate, workingHours);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getContext(), "⚠ שגיאה בטעינת שעות העבודה.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }, year, month, day);
 
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()); // מונע בחירה של תאריכים קודמים
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
         datePickerDialog.show();
     }
-    /**
-     * בדיקת האם השעה שבחרו זמינה **לפני השמירה**
-     */
+    private String getDefaultWorkingHours(int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+
+        // אם זה יום שישי, שעות העבודה קצרות יותר
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
+            return "08:00 - 14:00";
+        } else {
+            return "08:00 - 19:00";
+        }
+    }
+
+
+
+    private void loadAvailableTimes(String date, String workingHours) {
+        availableTimes = new ArrayList<>();
+        bookedTimes = new ArrayList<>();
+
+        String[] hoursSplit = workingHours.split(" - ");
+        if (hoursSplit.length == 2) {
+            String startHour = hoursSplit[0];
+            String endHour = hoursSplit[1];
+            availableTimes = generateTimeSlots(startHour, endHour);
+        } else {
+            availableTimes = Arrays.asList("08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00");
+        }
+
+        updateTimeSpinner();
+    }
+    private void updateClientWorkingHours(String date, String workingHours) {
+        DatabaseReference clientsRef = FirebaseDatabase.getInstance().getReference("appointments");
+
+        clientsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot appointmentSnapshot : userSnapshot.getChildren()) {
+                        String appointmentDate = appointmentSnapshot.child("date").getValue(String.class);
+
+                        if (appointmentDate != null && appointmentDate.equals(date)) {
+                            // עדכון שעות העבודה בתורים של הלקוחות
+                            appointmentSnapshot.getRef().child("working_hours").setValue(workingHours);
+                        }
+                    }
+                }
+                Toast.makeText(getContext(), "📅 שעות העבודה עודכנו אצל הלקוחות!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "⚠ שגיאה בעדכון שעות העבודה ללקוחות.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private List<String> generateTimeSlots(String startHour, String endHour) {
+        List<String> slots = new ArrayList<>();
+        int start = Integer.parseInt(startHour.split(":")[0]);
+        int end = Integer.parseInt(endHour.split(":")[0]);
+
+        for (int i = start; i < end; i++) {
+            slots.add(String.format("%02d:00", i));
+        }
+        return slots;
+    }
+
+    private void updateTimeSpinner() {
+        List<String> displayTimes = new ArrayList<>();
+
+        for (String time : availableTimes) {
+            if (bookedTimes.contains(time)) {
+                displayTimes.add(time + " ⛔ תפוס");
+            } else {
+                displayTimes.add(time);
+            }
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, displayTimes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timeSpinner.setAdapter(adapter);
+    }
+
     private void checkIfTimeIsAvailable(String date, String time) {
-        appointmentsReference.child(date).addListenerForSingleValueEvent(new ValueEventListener() {
+        appointmentsReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isTimeTaken = false;
 
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    if (userSnapshot.hasChild(time)) {
-                        isTimeTaken = true;
-                        break;
+                    for (DataSnapshot appointmentSnapshot : userSnapshot.getChildren()) {
+                        String bookedDate = appointmentSnapshot.child("date").getValue(String.class);
+                        String bookedTime = appointmentSnapshot.child("time").getValue(String.class);
+
+                        if (bookedDate != null && bookedTime != null && bookedDate.equals(date) && bookedTime.equals(time)) {
+                            isTimeTaken = true;
+                            break;
+                        }
                     }
+                    if (isTimeTaken) break;
                 }
 
                 if (isTimeTaken) {
-                    Toast.makeText(getContext(), "השעה שבחרת כבר תפוסה!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "⛔ השעה שבחרת כבר תפוסה!", Toast.LENGTH_SHORT).show();
                 } else {
                     Bundle bundle = new Bundle();
                     bundle.putString("selectedDate", selectedDate);
@@ -145,88 +241,11 @@ public class SelectDateFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "שגיאה בבדיקת זמינות השעה.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "⚠ שגיאה בבדיקת זמינות השעה.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    /**
-     * בדיקת האם תאריך זה חסום על ידי המנהל
-     */
-    private void checkIfDateIsBlocked(String date, int year, int month, int day) {
-        workdaysReference.child(date).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String dayType = snapshot.child("type").getValue(String.class);
-                    String hours = snapshot.child("hours").getValue(String.class);
-
-                    if (dayType.equals("יום חופשה") || dayType.equals("יום מחלה")) {
-                        selectedDateText.setText("❌ התאריך חסום: " + date);
-                        isDateBlocked = true;
-                        timeSpinner.setEnabled(false);
-                        btnNext.setEnabled(false);
-                    } else {
-                        selectedDateText.setText("✅ תאריך נבחר: " + date);
-                        isDateBlocked = false;
-                        timeSpinner.setEnabled(true);
-                        btnNext.setEnabled(true);
-                        loadAvailableTimes(date, year, month, day);
-                    }
-                } else {
-                    selectedDateText.setText("✅ תאריך נבחר: " + date);
-                    isDateBlocked = false;
-                    timeSpinner.setEnabled(true);
-                    btnNext.setEnabled(true);
-                    loadAvailableTimes(date, year, month, day);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "שגיאה בבדיקת זמינות תאריך.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /**
-     * טעינת השעות הפנויות בהתאם ליום (יום שישי שעות מיוחדות)
-     */
-    private void loadAvailableTimes(String date, int year, int month, int day) {
-        availableTimes = new ArrayList<>();
-        bookedTimes = new ArrayList<>();
-
-        if (isFriday(year, month, day)) {
-            availableTimes = Arrays.asList("08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00");
-        } else {
-            availableTimes = Arrays.asList("08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00");
-        }
-
-        updateTimeSpinner();
-    }
-
-    /**
-     * עדכון ה-Spinner עם השעות הפנויות והשעות התפוסות
-     */
-    private void updateTimeSpinner() {
-        List<String> displayTimes = new ArrayList<>();
-
-        for (String time : availableTimes) {
-            if (bookedTimes.contains(time)) {
-                displayTimes.add(time + " ⛔ תפוס"); // מסמן שעות תפוסות
-            } else {
-                displayTimes.add(time);
-            }
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, displayTimes);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        timeSpinner.setAdapter(adapter);
-    }
-
-    /**
-     * המרת תאריך לפורמט `DD-MM-YYYY`
-     */
     private String formatDate(int day, int month, int year) {
         return String.format("%02d-%02d-%04d", day, month, year);
     }

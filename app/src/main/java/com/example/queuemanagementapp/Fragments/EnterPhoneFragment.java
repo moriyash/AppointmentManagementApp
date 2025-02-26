@@ -72,16 +72,11 @@ public class EnterPhoneFragment extends Fragment {
                 });
     }
 
-    /**
-     * בדיקת מספר תקין: 10 ספרות ומתחיל ב-05
-     */
+
     private boolean isValidPhoneNumber(String phone) {
         return phone.matches("^((\\+972|972|0)5[0-9]{8})$");
     }
 
-    /**
-     * פונקציה שמסירה את הקידומת ושומרת רק 10 ספרות כמו 05XXXXXXXX
-     */
     private String cleanPhoneNumber(String phone) {
         if (phone.startsWith("+972")) {
             return "0" + phone.substring(4);

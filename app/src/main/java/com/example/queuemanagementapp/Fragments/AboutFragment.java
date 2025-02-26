@@ -13,9 +13,9 @@ import com.example.queuemanagementapp.Activities.MainActivity;
 import com.example.queuemanagementapp.R;
 
 public class AboutFragment extends Fragment {
+    private Button btnBackMain;
 
     public AboutFragment() {
-        // בנאי ריק (נדרש על ידי Android)
     }
 
     @Nullable
@@ -24,8 +24,8 @@ public class AboutFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
 
         // כפתור חזרה לעמוד הראשי
-        Button btnBackMain = view.findViewById(R.id.btn_back_main);
-        btnBackMain.setOnClickListener(v -> {
+       btnBackMain = view.findViewById(R.id.btn_back_main);
+       btnBackMain.setOnClickListener(v -> {
             // יצירת Intent לעמוד הראשי (MainActivity)
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  // לוודא שכל ה-Activities הקודמים ייסגרו
