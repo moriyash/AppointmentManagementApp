@@ -76,56 +76,53 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
 
     private void cancelAppointment(String appointmentKey, int position, View view) {
         if (appointmentKey == null || appointmentKey.isEmpty()) {
-            Log.e("FirebaseDelete", "❌ מזהה התור ריק או null! לא ניתן לבצע מחיקה.");
             Toast.makeText(view.getContext(), "שגיאה: לא ניתן למצוא את התור למחיקה!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // המזהה האמיתי של התור (1, 2, 3...) - צריך לחלץ אותו
+        // חילוץ מזהה התור מתוך ה-key
         String[] parts = appointmentKey.split("#");
         if (parts.length < 2) {
-            Log.e("FirebaseDelete", "❌ פורמט מזהה תור שגוי! ערך שהתקבל: " + appointmentKey);
             Toast.makeText(view.getContext(), "שגיאה: לא ניתן למחוק את התור!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String appointmentId = parts[1].trim(); // המזהה המספרי של התור (1,2,3...)
+        String appointmentId = parts[1].trim(); // מזהה התור
 
         // יצירת נתיב למחיקת התור
         DatabaseReference appointmentRef = databaseReference.child(phoneNumber).child(appointmentId);
-        Log.d("FirebaseDelete", "📌 הנתיב למחיקה: " + appointmentRef.toString());
 
         // בדיקה אם התור קיים לפני המחיקה
         appointmentRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    Log.d("FirebaseDelete", "✅ התור נמצא, ממשיך למחיקה...");
+                    // 🔽 מסיר את הסטטוס כדי לוודא שהתור לא חסום למחיקה
+                    appointmentRef.child("status").removeValue().addOnCompleteListener(task1 -> {
+                        // 🔽 מוחק את התור מה-Firebase
+                        appointmentRef.removeValue().addOnCompleteListener(task2 -> {
+                            if (task2.isSuccessful()) {
+                                Toast.makeText(view.getContext(), "התור נמחק בהצלחה!", Toast.LENGTH_SHORT).show();
 
-                    appointmentRef.removeValue().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d("FirebaseDelete", "✅ התור נמחק בהצלחה!");
-                            Toast.makeText(view.getContext(), "התור בוטל בהצלחה!", Toast.LENGTH_SHORT).show();
-
-                            // מחיקת התור גם מהרשימה בתצוגה
-                            appointmentsList.remove(position);
-                            notifyItemRemoved(position);
-                            notifyItemRangeChanged(position, appointmentsList.size());
-                        } else {
-                            Log.e("FirebaseDelete", "❌ שגיאה בביטול התור!", task.getException());
-                            Toast.makeText(view.getContext(), "שגיאה בביטול התור", Toast.LENGTH_SHORT).show();
-                        }
+                                // ✅ מחיקת התור מהרשימה בתצוגה
+                                if (position >= 0 && position < appointmentsList.size()) {
+                                    appointmentsList.remove(position);
+                                    notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, appointmentsList.size());
+                                }
+                            } else {
+                                Toast.makeText(view.getContext(), "❌ שגיאה בביטול התור", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     });
                 } else {
-                    Log.d("FirebaseDelete", "⚠️ התור לא נמצא ב-Firebase! אולי הנתיב שגוי?");
                     Toast.makeText(view.getContext(), "⚠️ התור לא נמצא ב-Firebase!", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("FirebaseDelete", "❌ שגיאה בגישה ל-Firebase!", error.toException());
-                Toast.makeText(view.getContext(), "שגיאה בגישה לנתוני Firebase!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "❌ שגיאה בגישה ל-Firebase!", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -172,7 +172,7 @@ public class AdminCalendarFragment extends Fragment {
                     if (selectedDayType.equals("יום חופשה") || selectedDayType.equals("יום מחלה")) {
                         saveDayTypeToFirebase(selectedDate, selectedDayType, "");
                     } else if (selectedDayType.equals("שעות עבודה")) {
-                        // ✅ כאן קוראים לפונקציה שתפתח את תיבת הבחירה לשעות העבודה
+                        //  כאן קוראים לפונקציה שתפתח את תיבת הבחירה לשעות העבודה
                         showTimePicker(selectedDate, selectedDayType);
                     } else if (selectedDayType.equals("בטל שינוי")) {
                         removeDayTypeFromFirebase(selectedDate);
@@ -321,5 +321,21 @@ public class AdminCalendarFragment extends Fragment {
         if (notificationId != null) {
             notificationsRef.child(notificationId).setValue("🚫 התור שלך בוטל עקב חופשה/מחלה");
         }
-    }}
 
+        // 🔽 עדכון סטטוס כל התורים של המשתמש שבוטלו
+        DatabaseReference userAppointmentsRef = FirebaseDatabase.getInstance().getReference("appointments").child(phoneNumber);
+
+        userAppointmentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appointmentSnapshot : snapshot.getChildren()) {
+                    appointmentSnapshot.getRef().child("status").setValue("🚫 בוטל עקב חופשה/מחלה");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "⚠ שגיאה בעדכון הסטטוס של התורים.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }}

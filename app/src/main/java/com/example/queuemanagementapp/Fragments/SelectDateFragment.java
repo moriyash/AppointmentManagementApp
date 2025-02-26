@@ -101,16 +101,24 @@ public class SelectDateFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String workingHours;
+                        String dayType = snapshot.child("type").getValue(String.class);
 
+                        // 🔹 אם היום מסומן כחופש/מחלה - נבטל קביעת תור!
+                        if (dayType != null && (dayType.equals("יום חופשה") || dayType.equals("יום מחלה"))) {
+                            Toast.makeText(getContext(), "🚫 יום זה חסום על ידי המנהל. בחר תאריך אחר.", Toast.LENGTH_SHORT).show();
+                            selectedDate = ""; // איפוס הבחירה
+                            return;
+                        }
+
+                        // 🔹 אם יש שעות בפיירבייס, נשתמש בהן
                         if (snapshot.exists() && snapshot.child("hours").exists()) {
-                            // ✅ אם יש שעות בפיירבייס, נקבל אותן
                             workingHours = snapshot.child("hours").getValue(String.class);
                         } else {
-                            // ⏳ אם אין נתונים בפיירבייס, השתמש בשעות ברירת מחדל
+                            // 🔹 אם אין נתונים, נטען שעות ברירת מחדל
                             workingHours = getDefaultWorkingHours(selectedYear, selectedMonth, selectedDay);
                         }
 
-                        // טוען את השעות לספינר
+                        // ✅ טוען את השעות לספינר
                         loadAvailableTimes(selectedDate, workingHours);
                     }
 
@@ -119,6 +127,7 @@ public class SelectDateFragment extends Fragment {
                         Toast.makeText(getContext(), "⚠ שגיאה בטעינת שעות העבודה.", Toast.LENGTH_SHORT).show();
                     }
                 });
+
             }
         }, year, month, day);
 

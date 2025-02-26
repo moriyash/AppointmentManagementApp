@@ -64,7 +64,7 @@ public class AppointmentsListFragment extends Fragment {
     }
 
     private void loadAppointmentsFromFirebase(String phone) {
-        Log.d("FirebaseData", "🔎 מחפש תורים למספר: " + phone);
+        Log.d("FirebaseData", "🔎 מאזין לתורים של המספר: " + phone);
 
         appointmentsReference.child(phone).addValueEventListener(new ValueEventListener() { // מאזין קבוע!
             @Override
@@ -77,7 +77,7 @@ public class AppointmentsListFragment extends Fragment {
                 }
 
                 for (DataSnapshot appointmentSnapshot : snapshot.getChildren()) {
-                    String appointmentId = appointmentSnapshot.getKey(); // מזהה התור (1,2,3...)
+                    String appointmentId = appointmentSnapshot.getKey();
                     String date = appointmentSnapshot.child("date").getValue(String.class);
                     String time = appointmentSnapshot.child("time").getValue(String.class);
                     String service = appointmentSnapshot.child("service").getValue(String.class);
@@ -86,9 +86,9 @@ public class AppointmentsListFragment extends Fragment {
                     if (date != null && time != null) {
                         String appointmentText = "📅 תאריך: " + date + " | ⏰ שעה: " + time + " | 🆔 תור #" + appointmentId;
 
-                        // אם התור בוטל - נוסיף התראה מיוחדת
-                        if (status != null && status.trim().equalsIgnoreCase("בוטל עקב חופשה/מחלה")) {
-                            appointmentText += " (🚫 התור בוטל על ידי העסק!)";
+                        // ✅ אם התור בוטל - נוסיף סימון והתראה
+                        if (status != null && status.trim().equalsIgnoreCase("🚫 בוטל עקב חופשה/מחלה")) {
+                            appointmentText += " (🚫 בוטל על ידי העסק!)";
                         }
 
                         appointmentsList.add(appointmentText);
@@ -98,7 +98,7 @@ public class AppointmentsListFragment extends Fragment {
                 if (appointmentsList.isEmpty()) {
                     Toast.makeText(getContext(), "לא נמצאו תורים למספר זה", Toast.LENGTH_SHORT).show();
                 } else {
-                    // עדכון הרשימה
+                    // ✅ עדכון הרשימה בכל שינוי
                     appointmentsAdapter = new AppointmentsAdapter(appointmentsList, phoneNumber, appointmentsReference);
                     recyclerAppointments.setAdapter(appointmentsAdapter);
                     recyclerAppointments.setVisibility(View.VISIBLE);
@@ -107,10 +107,11 @@ public class AppointmentsListFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "שגיאה בטעינת התורים", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "⚠ שגיאה בטעינת התורים.", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
 
 }
