@@ -60,10 +60,10 @@ public class AdminCalendarFragment extends Fragment {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            requireActivity().finish(); // סוגר את הפרגמנט ומחזיר לעמוד הראשי
+            requireActivity().finish();
         });
 
-        return view; // ✅ הוספתי את החזרת ה-View החסרה
+        return view;
     }
 
     private boolean isSaturday(int year, int month, int day) {
@@ -100,7 +100,6 @@ public class AdminCalendarFragment extends Fragment {
                     selectedHours = snapshot.child("hours").getValue(String.class);
                     selectedDateText.setText("📅 תאריך: " + date + "\n📝 סוג יום: " + selectedDayType + "\n⏰ שעות: " + selectedHours);
 
-                    // ✅ פותח אוטומטית את תיבת האפשרויות אם כבר הוגדר סוג יום
                     showDayTypeDialog();
                 } else {
                     showDayTypeDialog();
@@ -117,11 +116,9 @@ public class AdminCalendarFragment extends Fragment {
     private void showTimePicker(String date, String dayType) {
         Calendar calendar = Calendar.getInstance();
 
-        // בחירת שעת התחלה
         TimePickerDialog startPicker = new TimePickerDialog(getContext(), (view, startHour, startMinute) -> {
             String startTime = String.format("%02d:%02d", startHour, startMinute);
 
-            // בחירת שעת סיום אחרי שעת ההתחלה
             TimePickerDialog endPicker = new TimePickerDialog(getContext(), (view2, endHour, endMinute) -> {
                 String endTime = String.format("%02d:%02d", endHour, endMinute);
 
@@ -132,7 +129,6 @@ public class AdminCalendarFragment extends Fragment {
 
                 Toast.makeText(getContext(), "✅ שעות העבודה נשמרו: " + workingHours, Toast.LENGTH_SHORT).show();
 
-                // ✅ קריאה לפונקציה שמעדכנת את שעות העבודה של הלקוחות!
                 updateClientWorkingHours(date, workingHours);
 
             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
@@ -173,7 +169,6 @@ public class AdminCalendarFragment extends Fragment {
                     if (selectedDayType.equals("יום חופשה") || selectedDayType.equals("יום מחלה")) {
                         saveDayTypeToFirebase(selectedDate, selectedDayType, "");
                     } else if (selectedDayType.equals("שעות עבודה")) {
-                        //  כאן קוראים לפונקציה שתפתח את תיבת הבחירה לשעות העבודה
                         showTimePicker(selectedDate, selectedDayType);
                     } else if (selectedDayType.equals("בטל שינוי")) {
                         removeDayTypeFromFirebase(selectedDate);
@@ -257,7 +252,6 @@ public class AdminCalendarFragment extends Fragment {
                         if (appointmentDate != null && appointmentDate.equals(date)) {
                             appointmentSnapshot.getRef().child("status").removeValue(); // מחיקת הסטטוס
 
-                            // מחיקת ההתראה למשתמש
                             String userPhone = userSnapshot.getKey();
                             removeNotificationForUser(userPhone);
                         }
@@ -286,7 +280,7 @@ public class AdminCalendarFragment extends Fragment {
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     String userPhone = userSnapshot.getKey(); // שליפת מספר הטלפון של המשתמש
 
-                    boolean hasCanceledAppointments = false; // נבדוק אם יש ביטולים
+                    boolean hasCanceledAppointments = false;
 
                     for (DataSnapshot appointmentSnapshot : userSnapshot.getChildren()) {
                         String appointmentDate = appointmentSnapshot.child("date").getValue(String.class);
@@ -323,7 +317,7 @@ public class AdminCalendarFragment extends Fragment {
             notificationsRef.child(notificationKey).setValue("🚫 התור שלך ב-" + targetDate + " בוטל עקב חופשה/מחלה");
         }
 
-        // 🔽 עדכון סטטוס רק לתורים עם התאריך המתאים
+        //  עדכון סטטוס רק לתורים עם התאריך המתאים
         DatabaseReference userAppointmentsRef = FirebaseDatabase.getInstance().getReference("appointments").child(phoneNumber);
 
         userAppointmentsRef.addListenerForSingleValueEvent(new ValueEventListener() {

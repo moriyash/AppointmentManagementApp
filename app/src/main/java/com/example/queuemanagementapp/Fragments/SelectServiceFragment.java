@@ -49,7 +49,6 @@ public class SelectServiceFragment extends Fragment {
         editTextOtherService = view.findViewById(R.id.edit_text_other_service);
         editTextOtherService.setVisibility(View.GONE); // תחילה מוסתר
 
-        // יצירת כפתורי בחירה דינאמית
         for (String service : services) {
             RadioButton radioButton = new RadioButton(getContext());
             radioButton.setText(service);
@@ -59,12 +58,10 @@ public class SelectServiceFragment extends Fragment {
             radioGroup.addView(radioButton);
         }
 
-        // הוספת אפשרות "אחר"
         RadioButton radioButtonOther = new RadioButton(getContext());
         radioButtonOther.setText("אחר...");
         radioGroup.addView(radioButtonOther);
 
-        // קבלת השירות שנבחר
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton selectedRadioButton = view.findViewById(checkedId);
             if (selectedRadioButton != null) {
@@ -94,7 +91,7 @@ public class SelectServiceFragment extends Fragment {
             public void afterTextChanged(Editable s) {}
         });
 
-        // לחיצה על "המשך" - שליחת הנתון לדף הבא
+
         btnNext.setOnClickListener(v -> {
             if (!selectedService.isEmpty()) {
                 Bundle bundle = new Bundle();
@@ -103,7 +100,6 @@ public class SelectServiceFragment extends Fragment {
             }
         });
 
-        // לחיצה על "חזור"
         btnBack.setOnClickListener(v -> Navigation.findNavController(view).navigateUp());
 
         return view;

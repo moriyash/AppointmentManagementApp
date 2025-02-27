@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/enterPhoneFragment"> <!-- העמוד הראשון יהיה הכנסת מספר טלפון -->
+    app:startDestination="@id/enterPhoneFragment">
 
     <!-- עמוד הזנת טלפון -->
     <fragment
@@ -41,7 +41,7 @@
         android:name="com.example.queuemanagementapp.Fragments.ConfirmAppointmentFragment"
         android:label="אישור תור"
         tools:layout="@layout/fragment_confirm_appointment">
-        <!-- אין צורך ב-action לעמוד סיכום תור (finalAppointmentFragment) -->
+
     </fragment>
 
 

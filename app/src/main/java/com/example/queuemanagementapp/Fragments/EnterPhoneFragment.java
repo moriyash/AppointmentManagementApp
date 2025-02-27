@@ -46,7 +46,6 @@ public class EnterPhoneFragment extends Fragment {
                 return;
             }
 
-            // הסרת קידומת ושמירת מספר בצורה תקנית
             lastPhoneNumber = phoneNumber;
             phoneNumber = cleanPhoneNumber(phoneNumber);
             savePhoneNumber(phoneNumber, view);
@@ -78,7 +77,7 @@ public class EnterPhoneFragment extends Fragment {
                 });
     }
 
-
+// validation
     private boolean isValidPhoneNumber(String phone) {
         return phone.matches("^((\\+972|972|0)5[0-9]{8})$");
     }

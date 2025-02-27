@@ -33,7 +33,6 @@ public class AppointmentsListLoginFragment extends Fragment {
         btnViewAppointments = view.findViewById(R.id.btn_view_appointments);
         btnBackMain = view.findViewById(R.id.btn_back_main);
 
-        // לחיצה על כפתור להצגת תורים
         btnViewAppointments.setOnClickListener(v -> {
             String phoneNumber = edtPhoneNumber.getText().toString().trim();
 
@@ -42,7 +41,6 @@ public class AppointmentsListLoginFragment extends Fragment {
                 return;
             }
 
-            // הסרת קידומת כדי לוודא שהמספר נשמר כמו שצריך ב-Firebase
             phoneNumber = cleanPhoneNumber(phoneNumber);
 
             // ניווט לפרגמנט רשימת התורים עם מספר טלפון

@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"/>
 
-            <!-- תיבת טקסט להזנת שירות חופשי (מופיעה רק אם בוחרים "אחר") -->
+
             <EditText
                 android:id="@+id/edit_text_other_service"
                 android:layout_width="match_parent"

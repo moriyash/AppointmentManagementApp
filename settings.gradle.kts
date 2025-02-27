@@ -9,8 +9,8 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
-        jcenter()  // אם יש צורך במאגרים ישנים
-        maven { url = uri("https://jitpack.io") }  // אם יש צורך בתלויות מ-Jitpack
+        jcenter()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 dependencyResolutionManagement {

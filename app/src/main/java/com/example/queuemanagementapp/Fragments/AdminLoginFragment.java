@@ -23,7 +23,6 @@ public class AdminLoginFragment extends Fragment {
     private Button loginButton, backButton;
     private NavController navController;
 
-    // אימייל וסיסמה מורשים
     private static final String ADMIN_EMAIL = "moriya2002@gmail.com";
     private static final String ADMIN_PASSWORD = "hair1234";
 
@@ -36,7 +35,6 @@ public class AdminLoginFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin_login, container, false);
 
-        // אתחול NavController
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_admin);
 
         emailEditText = view.findViewById(R.id.et_admin_email);
@@ -44,7 +42,6 @@ public class AdminLoginFragment extends Fragment {
         loginButton = view.findViewById(R.id.btn_admin_login_confirm);
         backButton = view.findViewById(R.id.btn_main_back);
 
-        // מאזין לכפתור ההתחברות
         loginButton.setOnClickListener(v -> {
             String email = emailEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();

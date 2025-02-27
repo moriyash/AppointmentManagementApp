@@ -40,7 +40,6 @@ public class ConfirmAppointmentFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_confirm_appointment, container, false);
 
-        // אתחול Firebase
         db = FirebaseFirestore.getInstance();
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("Users"); // חיבור ל-"Users"
@@ -66,7 +65,6 @@ public class ConfirmAppointmentFragment extends Fragment {
                 for (DataSnapshot snapshot : task.getResult().getChildren()) {
                     // phoneNumber = snapshot.getValue(String.class);
                     phoneNumber = EnterPhoneFragment.getLastPhoneNumber();
-                    // ✅ בדיקה אם המספר קיים
                     if (phoneNumber == null || phoneNumber.isEmpty()) {
                         Toast.makeText(getContext(), "שגיאה: מספר טלפון לא נמצא", Toast.LENGTH_SHORT).show();
                         return;

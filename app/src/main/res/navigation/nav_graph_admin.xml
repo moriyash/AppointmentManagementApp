@@ -4,27 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:startDestination="@id/adminLoginFragment">
 
-    <!-- פרגמנט התחברות מנהל -->
     <fragment
         android:id="@+id/adminLoginFragment"
         android:name="com.example.queuemanagementapp.Fragments.AdminLoginFragment"
         android:label="כניסת מנהל"
         tools:layout="@layout/fragment_admin_login">
 
-        <!-- פעולה למעבר ללוח השנה לאחר התחברות -->
         <action
             android:id="@+id/action_adminLoginFragment_to_adminCalendarFragment"
             app:destination="@id/adminCalendarFragment"/>
     </fragment>
 
-    <!-- פרגמנט לוח שנה למנהל -->
     <fragment
         android:id="@+id/adminCalendarFragment"
         android:name="com.example.queuemanagementapp.Fragments.AdminCalendarFragment"
         android:label="לוח שנה למנהל"
         tools:layout="@layout/fragment_admin_calendar">
 
-        <!-- פעולה לחזרה לעמוד התחברות -->
         <action
             android:id="@+id/action_adminCalendarFragment_to_adminLoginFragment"
             app:destination="@id/adminLoginFragment"/>

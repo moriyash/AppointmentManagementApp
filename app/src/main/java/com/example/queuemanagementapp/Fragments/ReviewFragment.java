@@ -43,7 +43,6 @@ public class ReviewFragment extends Fragment {
     private List<Review> reviewList = new ArrayList<>();
 
     public ReviewFragment() {
-        // קונסטרקטור ריק חובה
     }
 
     @Override
@@ -62,12 +61,11 @@ public class ReviewFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reviews, container, false);
 
-        // אתחול רכיבים – כאן אין צורך בשדה להזנת מספר טלפון
         edtReviewerName = view.findViewById(R.id.edt_reviewer_name);
         edtReviewContent = view.findViewById(R.id.edt_review_content);
         ratingBar = view.findViewById(R.id.rating_bar);
         btnSubmitReview = view.findViewById(R.id.btn_submit_review);
-        btnBackMain = view.findViewById(R.id.btn_back_main); // אתחול כפתור חזור
+        btnBackMain = view.findViewById(R.id.btn_back_main);
         progressBar = view.findViewById(R.id.progressBar);
         recyclerViewReviews = view.findViewById(R.id.recycler_reviews);
 

@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services") // Google Services Plugin
-    id("com.google.firebase.crashlytics") // Firebase Crashlytics (אופציונלי)
-    id("com.google.firebase.firebase-perf") // Firebase Performance (אופציונלי)
+    id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
 }
 
 android {
@@ -35,10 +35,10 @@ android {
 }
 
 dependencies {
-    implementation("com.google.firebase:firebase-auth:22.3.1") // Firebase Authentication
-    implementation("com.google.firebase:firebase-firestore:24.6.1") // Firestore Database
-    implementation("com.google.firebase:firebase-database:20.3.1") // RealTime Database (אופציונלי)
-    implementation("com.google.android.gms:play-services-auth:20.7.0") // Google Play Auth Services
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("com.google.firebase:firebase-firestore:24.6.1")
+    implementation("com.google.firebase:firebase-database:20.3.1")
+    implementation("com.google.android.gms:play-services-auth:20.7.0") 
 
 
     implementation(libs.appcompat)

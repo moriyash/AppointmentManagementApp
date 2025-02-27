@@ -102,7 +102,6 @@ public class AppointmentsListFragment extends Fragment {
                 if (getContext() != null && appointmentsList.isEmpty()) {
                     Toast.makeText(getContext(), "לא נמצאו תורים למספר זה", Toast.LENGTH_SHORT).show();
                 } else {
-                    // ✅ עדכון הרשימה בכל שינוי
                     appointmentsAdapter = new AppointmentsAdapter(appointmentsList, phoneNumber, appointmentsReference);
                     recyclerAppointments.setAdapter(appointmentsAdapter);
                     recyclerAppointments.setVisibility(View.VISIBLE);

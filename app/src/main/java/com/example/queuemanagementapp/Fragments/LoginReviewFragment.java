@@ -26,7 +26,6 @@ public class LoginReviewFragment extends Fragment {
     private Button btnViewReviews, btnBackMain;
 
     public LoginReviewFragment() {
-        // קונסטרקטור ריק חובה
     }
 
     @Nullable
@@ -36,7 +35,6 @@ public class LoginReviewFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login_review, container, false);
 
-        // אתחול רכיבים
         edtPhoneNumber = view.findViewById(R.id.edt_phone_number);
         btnViewReviews = view.findViewById(R.id.btn_view_reviews);
         btnBackMain = view.findViewById(R.id.btn_back_main);
@@ -50,10 +48,8 @@ public class LoginReviewFragment extends Fragment {
 
             // הסרת קידומת כדי לוודא שהמספר נשמר בפורמט תקין (05XXXXXXXX)
             phoneNumber = cleanPhoneNumber(phoneNumber);
-            // הגדרת משתנה final לשימוש בתוך ה-inner class
             final String finalPhoneNumber = phoneNumber;
 
-            // בדיקה במערכת אם המספר קיים
             DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference("Users");
             usersReference.child(finalPhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
