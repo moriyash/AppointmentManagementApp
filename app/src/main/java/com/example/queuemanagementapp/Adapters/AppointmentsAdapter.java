@@ -84,8 +84,7 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
         String[] parts = appointmentKey.split("#");
         // String appointmentId = parts.length > 1 ? parts[1].trim() : "";
         String appointmentId = parts[1].trim();
-        appointmentId = appointmentId.charAt(0) + "";
-
+        appointmentId = appointmentId.split(" ")[0];
         if (appointmentId.isEmpty()) {
             Toast.makeText(view.getContext(), "שגיאה: מזהה תור לא תקין!", Toast.LENGTH_SHORT).show();
             return;

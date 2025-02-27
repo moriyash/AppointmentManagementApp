@@ -88,7 +88,7 @@ public class AppointmentsListFragment extends Fragment {
                     String status = appointmentSnapshot.child("status").getValue(String.class);
 
                     if (date != null && time != null) {
-                        String appointmentText = "📅 תאריך: " + date + " | ⏰ שעה: " + time + " | 🆔 תור #" + appointmentId;
+                        String appointmentText = "📅 תאריך: " + date + " | ⏰ שעה: " + time + " |  תור #" + appointmentId;
 
                         // ✅ אם התור בוטל - נוסיף סימון והתראה
                         if (status != null && status.trim().equalsIgnoreCase("🚫 בוטל עקב חופשה/מחלה")) {

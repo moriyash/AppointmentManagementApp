@@ -8,7 +8,7 @@
         android:id="@+id/emptyFragment"
         android:name="com.example.queuemanagementapp.Fragments.EmptyFragment"
         android:label="Empty"
-        tools:layout="@layout/fragment_empty" />
+        tools:layout="@layout/empty_fragment" />
 
 
     <!-- עמוד קצת עלינו -->
