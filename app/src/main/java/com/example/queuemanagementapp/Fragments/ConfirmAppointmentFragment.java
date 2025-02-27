@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ConfirmAppointmentFragment extends Fragment {
@@ -63,14 +64,13 @@ public class ConfirmAppointmentFragment extends Fragment {
         database.getReference("Users").limitToLast(1).get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult().hasChildren()) {
                 for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                    phoneNumber = snapshot.getValue(String.class);
-
+                    // phoneNumber = snapshot.getValue(String.class);
+                    phoneNumber = EnterPhoneFragment.getLastPhoneNumber();
                     // ✅ בדיקה אם המספר קיים
                     if (phoneNumber == null || phoneNumber.isEmpty()) {
                         Toast.makeText(getContext(), "שגיאה: מספר טלפון לא נמצא", Toast.LENGTH_SHORT).show();
                         return;
                     }
-
                     saveAppointment(phoneNumber, view);
                     return;
                 }
@@ -82,6 +82,7 @@ public class ConfirmAppointmentFragment extends Fragment {
 
     private void saveAppointment(String phoneNumber, View view) {
         DatabaseReference userAppointmentsRef = database.getReference("appointments").child(phoneNumber);
+        System.out.println(phoneNumber);
 
         userAppointmentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

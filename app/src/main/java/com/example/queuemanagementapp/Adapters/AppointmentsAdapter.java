@@ -82,7 +82,9 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
 
         // חילוץ מזהה התור מתוך ה-key
         String[] parts = appointmentKey.split("#");
-        String appointmentId = parts.length > 1 ? parts[1].trim() : "";
+        // String appointmentId = parts.length > 1 ? parts[1].trim() : "";
+        String appointmentId = parts[1].trim();
+        appointmentId = appointmentId.charAt(0) + "";
 
         if (appointmentId.isEmpty()) {
             Toast.makeText(view.getContext(), "שגיאה: מזהה תור לא תקין!", Toast.LENGTH_SHORT).show();
@@ -99,6 +101,8 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    System.out.println(snapshot);
+
                     // 🔽 מחיקת הסטטוס אם קיים
                     appointmentRef.child("status").removeValue().addOnCompleteListener(task1 -> {
                         // 🔽 מחיקת התור מה-Firebase
@@ -108,16 +112,22 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
 
                                 // ✅ מחיקת התור מהרשימה בתצוגה
                                 if (position >= 0 && position < appointmentsList.size()) {
+                                    System.out.println("hello! how did we get here?");
+
+                                    System.out.println(appointmentsList.get(position));
+
                                     appointmentsList.remove(position);
                                     notifyItemRemoved(position);
                                     notifyItemRangeChanged(position, appointmentsList.size());
                                 }
+
                             } else {
                                 Toast.makeText(view.getContext(), "❌ שגיאה בביטול התור", Toast.LENGTH_SHORT).show();
                             }
                         });
                     });
                 } else {
+                    System.out.println(snapshot);
                     Toast.makeText(view.getContext(), "⚠️ התור לא נמצא ב-Firebase!", Toast.LENGTH_SHORT).show();
                 }
             }

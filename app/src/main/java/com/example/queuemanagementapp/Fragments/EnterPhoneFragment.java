@@ -22,6 +22,12 @@ public class EnterPhoneFragment extends Fragment {
     private DatabaseReference databaseReference;
     private ProgressBar progressBar;
 
+    private static String lastPhoneNumber;
+
+    public static String getLastPhoneNumber()
+    {
+        return lastPhoneNumber;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_enter_phone, container, false);
@@ -41,8 +47,8 @@ public class EnterPhoneFragment extends Fragment {
             }
 
             // הסרת קידומת ושמירת מספר בצורה תקנית
+            lastPhoneNumber = phoneNumber;
             phoneNumber = cleanPhoneNumber(phoneNumber);
-
             savePhoneNumber(phoneNumber, view);
         });
 

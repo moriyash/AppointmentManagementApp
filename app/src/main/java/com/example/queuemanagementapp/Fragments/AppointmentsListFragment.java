@@ -72,6 +72,10 @@ public class AppointmentsListFragment extends Fragment {
                 List<String> appointmentsList = new ArrayList<>();
 
                 if (getContext() != null && !snapshot.exists()) {
+                    appointmentsAdapter = new AppointmentsAdapter(appointmentsList, phoneNumber, appointmentsReference);
+                    recyclerAppointments.setAdapter(appointmentsAdapter);
+                    recyclerAppointments.setVisibility(View.VISIBLE);
+
                     Toast.makeText(getContext(), "אין תורים זמינים למספר זה", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -95,7 +99,7 @@ public class AppointmentsListFragment extends Fragment {
                     }
                 }
 
-                if (appointmentsList.isEmpty()) {
+                if (getContext() != null && appointmentsList.isEmpty()) {
                     Toast.makeText(getContext(), "לא נמצאו תורים למספר זה", Toast.LENGTH_SHORT).show();
                 } else {
                     // ✅ עדכון הרשימה בכל שינוי
@@ -111,7 +115,4 @@ public class AppointmentsListFragment extends Fragment {
             }
         });
     }
-
-
-
 }

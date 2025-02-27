@@ -96,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
         galleryImages.add(R.drawable.haircut8);
         galleryImages.add(R.drawable.haircut9);
         galleryImages.add(R.drawable.haircut10);
+        galleryImages.add(R.drawable.haircut11);
+        galleryImages.add(R.drawable.haircut12);
+        galleryImages.add(R.drawable.haircut13);
+
 
         GalleryAdapter galleryAdapter = new GalleryAdapter(galleryImages);
         recyclerGallery.setAdapter(galleryAdapter);
@@ -117,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
 
         ServicesAdapter servicesAdapter = new ServicesAdapter(services);
         recyclerServices.setAdapter(servicesAdapter);
+
+
 
         // ניווט ללחצן "קצת עלינו"
         btnAbout.setOnClickListener(v -> {
