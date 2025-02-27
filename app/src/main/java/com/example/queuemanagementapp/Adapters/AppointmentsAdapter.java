@@ -75,31 +75,33 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
 
 
     private void cancelAppointment(String appointmentKey, int position, View view) {
-        if (appointmentKey == null || appointmentKey.isEmpty()) {
+        if (appointmentKey == null || appointmentKey.isEmpty() || !appointmentKey.contains("#")) {
             Toast.makeText(view.getContext(), "שגיאה: לא ניתן למצוא את התור למחיקה!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // חילוץ מזהה התור מתוך ה-key
         String[] parts = appointmentKey.split("#");
-        if (parts.length < 2) {
-            Toast.makeText(view.getContext(), "שגיאה: לא ניתן למחוק את התור!", Toast.LENGTH_SHORT).show();
+        String appointmentId = parts.length > 1 ? parts[1].trim() : "";
+
+        if (appointmentId.isEmpty()) {
+            Toast.makeText(view.getContext(), "שגיאה: מזהה תור לא תקין!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String appointmentId = parts[1].trim(); // מזהה התור
-        appointmentId = appointmentId.charAt(0) + "";
         // יצירת נתיב למחיקת התור
         DatabaseReference appointmentRef = databaseReference.child(phoneNumber).child(appointmentId);
+
+        Log.d("FirebasePath", "Path: " + appointmentRef.toString()); // בדיקת הנתיב
 
         // בדיקה אם התור קיים לפני המחיקה
         appointmentRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    // 🔽 מסיר את הסטטוס כדי לוודא שהתור לא חסום למחיקה
+                    // 🔽 מחיקת הסטטוס אם קיים
                     appointmentRef.child("status").removeValue().addOnCompleteListener(task1 -> {
-                        // 🔽 מוחק את התור מה-Firebase
+                        // 🔽 מחיקת התור מה-Firebase
                         appointmentRef.removeValue().addOnCompleteListener(task2 -> {
                             if (task2.isSuccessful()) {
                                 Toast.makeText(view.getContext(), "התור נמחק בהצלחה!", Toast.LENGTH_SHORT).show();
@@ -126,6 +128,7 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
             }
         });
     }
+
 
 
 }

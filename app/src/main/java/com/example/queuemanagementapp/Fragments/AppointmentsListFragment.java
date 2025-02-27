@@ -71,7 +71,7 @@ public class AppointmentsListFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<String> appointmentsList = new ArrayList<>();
 
-                if (!snapshot.exists()) {
+                if (getContext() != null && !snapshot.exists()) {
                     Toast.makeText(getContext(), "אין תורים זמינים למספר זה", Toast.LENGTH_SHORT).show();
                     return;
                 }

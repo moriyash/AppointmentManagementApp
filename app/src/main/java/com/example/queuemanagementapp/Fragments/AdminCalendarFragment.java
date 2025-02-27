@@ -29,7 +29,8 @@ public class AdminCalendarFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
-    public AdminCalendarFragment() {}
+    public AdminCalendarFragment() {
+    }
 
     @Nullable
     @Override
@@ -180,6 +181,7 @@ public class AdminCalendarFragment extends Fragment {
                 });
         builder.create().show();
     }
+
     private void updateClientWorkingHours(String date, String workingHours) {
         DatabaseReference clientsRef = FirebaseDatabase.getInstance().getReference("appointments");
 
@@ -219,8 +221,6 @@ public class AdminCalendarFragment extends Fragment {
             }
         });
     }
-
-
 
 
     private void saveDayTypeToFirebase(String date, String dayType, String hours) {
@@ -297,9 +297,9 @@ public class AdminCalendarFragment extends Fragment {
                         }
                     }
 
-                    // אם המשתמש איבד תור, שלח לו התראה
+                    // אם המשתמש איבד תור, שלח לו התראה עם התאריך
                     if (hasCanceledAppointments) {
-                        sendNotificationToUser(userPhone);
+                        sendNotificationToUser(userPhone, date);
                     }
                 }
             }
@@ -312,23 +312,29 @@ public class AdminCalendarFragment extends Fragment {
     }
 
     /**
-     * שליחת הודעה למשתמש שהתור שלו בוטל
+     * שליחת הודעה למשתמש שהתור שלו בוטל רק בתאריך מסוים.
      */
-    private void sendNotificationToUser(String phoneNumber) {
+    private void sendNotificationToUser(String phoneNumber, String targetDate) {
         DatabaseReference notificationsRef = FirebaseDatabase.getInstance().getReference("notifications").child(phoneNumber);
         String notificationId = notificationsRef.push().getKey();
         String notificationKey = "status";
-        if (notificationId != null) {
-            notificationsRef.child(notificationKey).setValue("🚫 התור שלך בוטל עקב חופשה/מחלה");        }
 
-        // 🔽 עדכון סטטוס כל התורים של המשתמש שבוטלו
+        if (notificationId != null) {
+            notificationsRef.child(notificationKey).setValue("🚫 התור שלך ב-" + targetDate + " בוטל עקב חופשה/מחלה");
+        }
+
+        // 🔽 עדכון סטטוס רק לתורים עם התאריך המתאים
         DatabaseReference userAppointmentsRef = FirebaseDatabase.getInstance().getReference("appointments").child(phoneNumber);
 
         userAppointmentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot appointmentSnapshot : snapshot.getChildren()) {
-                    appointmentSnapshot.getRef().child("status").setValue("🚫 בוטל עקב חופשה/מחלה");
+                    String appointmentDate = appointmentSnapshot.child("date").getValue(String.class);
+
+                    if (appointmentDate != null && appointmentDate.equals(targetDate)) { // ✅ בדיקה לפי תאריך
+                        appointmentSnapshot.getRef().child("status").setValue("🚫 בוטל עקב חופשה/מחלה");
+                    }
                 }
             }
 
@@ -337,4 +343,5 @@ public class AdminCalendarFragment extends Fragment {
                 Toast.makeText(getContext(), "⚠ שגיאה בעדכון הסטטוס של התורים.", Toast.LENGTH_SHORT).show();
             }
         });
-    }}
+    }
+}
