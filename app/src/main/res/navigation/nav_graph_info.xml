@@ -2,7 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/aboutFragment">
+    app:startDestination="@id/emptyFragment">
+
+    <fragment
+        android:id="@+id/emptyFragment"
+        android:name="com.example.queuemanagementapp.Fragments.EmptyFragment"
+        android:label="Empty"
+        tools:layout="@layout/fragment_empty" />
+
 
     <!-- עמוד קצת עלינו -->
     <fragment
