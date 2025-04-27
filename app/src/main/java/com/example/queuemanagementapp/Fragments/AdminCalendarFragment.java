@@ -50,9 +50,9 @@ public class AdminCalendarFragment extends Fragment {
         btnConfirmDayType.setOnClickListener(v -> {
             if (!selectedDate.isEmpty() && !selectedDayType.isEmpty()) {
                 saveDayTypeToFirebase(selectedDate, selectedDayType, selectedHours);
-                Toast.makeText(getContext(), "✅ השינוי נשמר בהצלחה!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " השינוי נשמר בהצלחה!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getContext(), "⚠ אנא בחר תאריך וסוג יום לפני האישור.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " אנא בחר תאריך וסוג יום לפני האישור.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -78,7 +78,7 @@ public class AdminCalendarFragment extends Fragment {
 
             // בדיקה אם היום שנבחר הוא שבת
             if (isSaturday(year, month, day)) {
-                Toast.makeText(getContext(), "🚫 אין אפשרות לקבוע ימי שבת.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " אין אפשרות לקבוע ימי שבת.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -98,7 +98,7 @@ public class AdminCalendarFragment extends Fragment {
                 if (snapshot.exists()) {
                     selectedDayType = snapshot.child("type").getValue(String.class);
                     selectedHours = snapshot.child("hours").getValue(String.class);
-                    selectedDateText.setText("📅 תאריך: " + date + "\n📝 סוג יום: " + selectedDayType + "\n⏰ שעות: " + selectedHours);
+                    selectedDateText.setText(" תאריך: " + date + "\n סוג יום: " + selectedDayType + "\n שעות: " + selectedHours);
 
                     showDayTypeDialog();
                 } else {
@@ -108,7 +108,7 @@ public class AdminCalendarFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                selectedDateText.setText("❌ שגיאה בטעינת הנתונים.");
+                selectedDateText.setText(" שגיאה בטעינת הנתונים.");
             }
         });
     }
@@ -122,12 +122,11 @@ public class AdminCalendarFragment extends Fragment {
             TimePickerDialog endPicker = new TimePickerDialog(getContext(), (view2, endHour, endMinute) -> {
                 String endTime = String.format("%02d:%02d", endHour, endMinute);
 
-                // ✅ שמירת השעות החדשות במסד הנתונים
                 String workingHours = startTime + " - " + endTime;
                 databaseReference.child(date).child("type").setValue(dayType);
                 databaseReference.child(date).child("hours").setValue(workingHours);
 
-                Toast.makeText(getContext(), "✅ שעות העבודה נשמרו: " + workingHours, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " שעות העבודה נשמרו: " + workingHours, Toast.LENGTH_SHORT).show();
 
                 updateClientWorkingHours(date, workingHours);
 
@@ -162,7 +161,7 @@ public class AdminCalendarFragment extends Fragment {
         String[] dayTypes = {"יום חופשה", "יום מחלה", "שעות עבודה", "בטל שינוי"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("📆 בחר סוג יום")
+        builder.setTitle(" בחר סוג יום")
                 .setItems(dayTypes, (dialog, which) -> {
                     selectedDayType = dayTypes[which];
 
@@ -206,7 +205,7 @@ public class AdminCalendarFragment extends Fragment {
                 databaseReference.child(date).child("hours").setValue(workingHours);
 
                 if (hasChanges) {
-                    Toast.makeText(getContext(), "📅 התורים שלא התאימו לשעות החדשות בוטלו.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), " התורים שלא התאימו לשעות החדשות בוטלו.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -225,16 +224,16 @@ public class AdminCalendarFragment extends Fragment {
         if (dayType.equals("יום חופשה") || dayType.equals("יום מחלה")) {
             cancelAppointmentsForDate(date);
         }
-        Toast.makeText(getContext(), "✅ השינוי נשמר: " + dayType, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), " השינוי נשמר: " + dayType, Toast.LENGTH_SHORT).show();
     }
 
     private void removeDayTypeFromFirebase(String date) {
         databaseReference.child(date).removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 restoreAppointmentsForDate(date);
-                Toast.makeText(getContext(), "🔄 השינוי בוטל, התורים חזרו למצבם הקודם.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " השינוי בוטל, התורים חזרו למצבם הקודם.", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getContext(), "❌ שגיאה בביטול השינוי.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " שגיאה בביטול השינוי.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -286,7 +285,7 @@ public class AdminCalendarFragment extends Fragment {
                         String appointmentDate = appointmentSnapshot.child("date").getValue(String.class);
 
                         if (appointmentDate != null && appointmentDate.equals(date)) {
-                            appointmentSnapshot.getRef().child("status").setValue("🚫 בוטל עקב חופשה/מחלה");
+                            appointmentSnapshot.getRef().child("status").setValue(" בוטל עקב חופשה/מחלה");
                             hasCanceledAppointments = true;
                         }
                     }
@@ -314,7 +313,7 @@ public class AdminCalendarFragment extends Fragment {
         String notificationKey = "status";
 
         if (notificationId != null) {
-            notificationsRef.child(notificationKey).setValue("🚫 התור שלך ב-" + targetDate + " בוטל עקב חופשה/מחלה");
+            notificationsRef.child(notificationKey).setValue(" התור שלך ב-" + targetDate + " בוטל עקב חופשה/מחלה");
         }
 
         //  עדכון סטטוס רק לתורים עם התאריך המתאים
@@ -326,8 +325,8 @@ public class AdminCalendarFragment extends Fragment {
                 for (DataSnapshot appointmentSnapshot : snapshot.getChildren()) {
                     String appointmentDate = appointmentSnapshot.child("date").getValue(String.class);
 
-                    if (appointmentDate != null && appointmentDate.equals(targetDate)) { // ✅ בדיקה לפי תאריך
-                        appointmentSnapshot.getRef().child("status").setValue("🚫 בוטל עקב חופשה/מחלה");
+                    if (appointmentDate != null && appointmentDate.equals(targetDate)) {
+                        appointmentSnapshot.getRef().child("status").setValue(" בוטל עקב חופשה/מחלה");
                     }
                 }
             }

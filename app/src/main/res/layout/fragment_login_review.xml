@@ -12,7 +12,6 @@
         android:padding="16dp"
         android:gravity="center_horizontal">
 
-        <!-- כותרת העמוד -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,7 +20,6 @@
             android:textStyle="bold"
             android:paddingBottom="16dp"/>
 
-        <!-- תיבת הזנת מספר טלפון -->
         <EditText
             android:id="@+id/edt_phone_number"
             android:layout_width="match_parent"
@@ -34,7 +32,6 @@
             android:padding="10dp"
             android:background="@android:drawable/editbox_background"/>
 
-        <!-- כפתור הצגת ביקורות -->
         <Button
             android:id="@+id/btn_view_reviews"
             android:layout_width="wrap_content"
@@ -46,12 +43,11 @@
             android:padding="12dp"
             android:layout_marginTop="16dp"/>
 
-        <!-- כפתור חזרה לעמוד הראשי -->
         <Button
             android:id="@+id/btn_back_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🔙 חזור"
+            android:text=" חזור"
             android:textSize="16sp"
             android:textColor="@color/white"
             android:backgroundTint="@color/black"

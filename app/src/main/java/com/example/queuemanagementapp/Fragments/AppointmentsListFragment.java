@@ -64,7 +64,7 @@ public class AppointmentsListFragment extends Fragment {
     }
 
     private void loadAppointmentsFromFirebase(String phone) {
-        Log.d("FirebaseData", "🔎 מאזין לתורים של המספר: " + phone);
+        Log.d("FirebaseData", " מאזין לתורים של המספר: " + phone);
 
         appointmentsReference.child(phone).addValueEventListener(new ValueEventListener() { // מאזין קבוע!
             @Override
@@ -88,11 +88,10 @@ public class AppointmentsListFragment extends Fragment {
                     String status = appointmentSnapshot.child("status").getValue(String.class);
 
                     if (date != null && time != null) {
-                        String appointmentText = "📅 תאריך: " + date + " | ⏰ שעה: " + time + " |  תור #" + appointmentId;
+                        String appointmentText = " תאריך: " + date + " |  שעה: " + time + " |  תור #" + appointmentId;
 
-                        // ✅ אם התור בוטל - נוסיף סימון והתראה
-                        if (status != null && status.trim().equalsIgnoreCase("🚫 בוטל עקב חופשה/מחלה")) {
-                            appointmentText += " (🚫 בוטל על ידי העסק!)";
+                        if (status != null && status.trim().equalsIgnoreCase(" בוטל עקב חופשה/מחלה")) {
+                            appointmentText += " ( בוטל על ידי העסק!)";
                         }
 
                         appointmentsList.add(appointmentText);
@@ -110,7 +109,7 @@ public class AppointmentsListFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "⚠ שגיאה בטעינת התורים.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " שגיאה בטעינת התורים.", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -25,7 +25,6 @@
         android:label="שעות פתיחה"
         tools:layout="@layout/fragment_opening_hours" />
 
-    <!-- עמוד התורים שלי -->
     <fragment
         android:id="@+id/myAppointmentsFragment"
         android:name="com.example.queuemanagementapp.Fragments.AppointmentsListLoginFragment"
@@ -36,7 +35,6 @@
             app:destination="@id/appointmentsListFragment" />
     </fragment>
 
-    <!-- עמוד רשימת התורים -->
     <fragment
         android:id="@+id/appointmentsListFragment"
         android:name="com.example.queuemanagementapp.Fragments.AppointmentsListFragment"
@@ -47,7 +45,6 @@
             app:argType="string" />
     </fragment>
 
-    <!-- עמוד LoginReview – כניסה לביקורות -->
     <fragment
         android:id="@+id/loginReviewFragment"
         android:name="com.example.queuemanagementapp.Fragments.LoginReviewFragment"
@@ -58,7 +55,6 @@
             app:destination="@id/reviewsFragment" />
     </fragment>
 
-    <!-- עמוד ביקורות -->
     <fragment
         android:id="@+id/reviewsFragment"
         android:name="com.example.queuemanagementapp.Fragments.ReviewFragment"

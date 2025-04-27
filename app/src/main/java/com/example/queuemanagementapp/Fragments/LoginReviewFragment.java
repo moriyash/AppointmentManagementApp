@@ -46,7 +46,6 @@ public class LoginReviewFragment extends Fragment {
                 return;
             }
 
-            // הסרת קידומת כדי לוודא שהמספר נשמר בפורמט תקין (05XXXXXXXX)
             phoneNumber = cleanPhoneNumber(phoneNumber);
             final String finalPhoneNumber = phoneNumber;
 
@@ -55,7 +54,6 @@ public class LoginReviewFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-                        // המספר קיים – נווט לעמוד הביקורות והעבר את המספר ב־Bundle
                         Bundle bundle = new Bundle();
                         bundle.putString("phoneNumber", finalPhoneNumber);
                         Navigation.findNavController(v)

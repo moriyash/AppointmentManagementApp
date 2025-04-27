@@ -102,14 +102,12 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
                 if (snapshot.exists()) {
                     System.out.println(snapshot);
 
-                    // 🔽 מחיקת הסטטוס אם קיים
+
                     appointmentRef.child("status").removeValue().addOnCompleteListener(task1 -> {
-                        // 🔽 מחיקת התור מה-Firebase
                         appointmentRef.removeValue().addOnCompleteListener(task2 -> {
                             if (task2.isSuccessful()) {
                                 Toast.makeText(view.getContext(), "התור נמחק בהצלחה!", Toast.LENGTH_SHORT).show();
 
-                                // ✅ מחיקת התור מהרשימה בתצוגה
                                 if (position >= 0 && position < appointmentsList.size()) {
                                     System.out.println("hello! how did we get here?");
 
@@ -121,19 +119,19 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
                                 }
 
                             } else {
-                                Toast.makeText(view.getContext(), "❌ שגיאה בביטול התור", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(view.getContext(), " שגיאה בביטול התור", Toast.LENGTH_SHORT).show();
                             }
                         });
                     });
                 } else {
                     System.out.println(snapshot);
-                    Toast.makeText(view.getContext(), "⚠️ התור לא נמצא ב-Firebase!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), " התור לא נמצא ב-Firebase!", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(view.getContext(), "❌ שגיאה בגישה ל-Firebase!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), " שגיאה בגישה ל-Firebase!", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -12,7 +12,6 @@
         android:padding="16dp"
         android:gravity="center_horizontal">
 
-        <!-- כותרת העמוד -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,7 +21,6 @@
             android:gravity="center"
             android:paddingBottom="16dp"/>
 
-        <!-- תיבת הזנת מספר טלפון -->
         <EditText
             android:id="@+id/edt_phone_number"
             android:layout_width="match_parent"
@@ -36,7 +34,6 @@
 
             android:background="@android:drawable/editbox_background"/>
 
-        <!-- כפתור הצגת תורים -->
         <Button
             android:id="@+id/btn_view_appointments"
             android:layout_width="wrap_content"
@@ -47,7 +44,6 @@
             android:text="הצג תורים"
             android:textColor="@color/black" />
 
-        <!-- רשימת התורים -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_appointments"
             android:layout_width="match_parent"
@@ -55,12 +51,11 @@
             android:paddingTop="10dp"
             android:visibility="gone"/>
 
-        <!-- כפתור חזרה -->
         <Button
             android:id="@+id/btn_back_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🔙 חזור"
+            android:text=" חזור"
             android:textSize="16sp"
             android:textColor="@color/white"
             android:backgroundTint="@color/black"

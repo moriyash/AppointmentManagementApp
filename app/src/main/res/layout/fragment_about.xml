@@ -12,7 +12,6 @@
         android:padding="16dp"
         android:gravity="center_horizontal">
 
-        <!-- כותרת גדולה ומודגשת -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,7 +22,6 @@
             android:gravity="center"
             android:paddingBottom="12dp"/>
 
-        <!-- כותרת משנית מודגשת -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +33,6 @@
             android:lineSpacingExtra="6dp"
             android:paddingBottom="12dp"/>
 
-        <!-- פסקת תוכן -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,7 +53,6 @@
             android:lineSpacingExtra="6dp"
             android:paddingBottom="10dp"/>
 
-        <!-- טקסט נוסף שמסכם -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,12 +64,11 @@
             android:lineSpacingExtra="6dp"
             android:paddingBottom="16dp"/>
 
-        <!-- כפתור חזרה -->
         <Button
             android:id="@+id/btn_back_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🔙 חזור"
+            android:text=" חזור"
             android:textSize="16sp"
             android:textColor="@color/white"
             android:backgroundTint="@color/black"

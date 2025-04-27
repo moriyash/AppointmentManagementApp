@@ -108,15 +108,15 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerServices = findViewById(R.id.recycler_services);
         recyclerServices.setLayoutManager(new LinearLayoutManager(this));
         List<String> services = new ArrayList<>();
-        services.add("✂️ תספורת גברים - ₪70");
-        services.add("💇‍♀️ תספורת נשים - ₪120");
-        services.add("🎨 צביעת שיער - ₪200");
-        services.add("🧴 החלקת שיער קרטין - ₪450");
-        services.add("💆‍♀️ טיפולי שיקום שיער - ₪300");
-        services.add("🖌 גוונים לשיער קצר - ₪250");
-        services.add("🖌 גוונים לשיער ארוך - ₪350");
-        services.add("💆‍♂️ שטיפת צבע - ₪100");
-        services.add("🪮 עיצוב תסרוקות ערב - ₪300");
+        services.add(" תספורת גברים - ₪70");
+        services.add("️ תספורת נשים - ₪120");
+        services.add(" צביעת שיער - ₪200");
+        services.add(" החלקת שיער קרטין - ₪450");
+        services.add(" טיפולי שיקום שיער - ₪300");
+        services.add(" גוונים לשיער קצר - ₪250");
+        services.add(" גוונים לשיער ארוך - ₪350");
+        services.add("️ שטיפת צבע - ₪100");
+        services.add(" עיצוב תסרוקות ערב - ₪300");
 
 
         ServicesAdapter servicesAdapter = new ServicesAdapter(services);
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // adress maps
-        btnOpenMaps.setText("📍 רחוב דיזנגוף 280, תל אביב יפו, ישראל");
+        btnOpenMaps.setText(" רחוב דיזנגוף 280, תל אביב יפו, ישראל");
         btnOpenMaps.setOnClickListener(v -> {
             String address = "רחוב דיזנגוף 280, תל אביב יפו, ישראל"; // כתובת העסק
             Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(address)); // יצירת URI לפתיחת הכתובת במפות

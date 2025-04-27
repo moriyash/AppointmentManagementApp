@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:startDestination="@id/enterPhoneFragment">
 
-    <!-- עמוד הזנת טלפון -->
     <fragment
         android:id="@+id/enterPhoneFragment"
         android:name="com.example.queuemanagementapp.Fragments.EnterPhoneFragment"
@@ -15,7 +14,6 @@
             app:destination="@id/selectServiceFragment"/>
     </fragment>
 
-    <!-- עמודים נוספים של קביעת תור -->
     <fragment
         android:id="@+id/selectServiceFragment"
         android:name="com.example.queuemanagementapp.Fragments.SelectServiceFragment"

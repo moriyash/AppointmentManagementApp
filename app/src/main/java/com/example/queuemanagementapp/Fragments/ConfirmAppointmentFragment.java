@@ -99,18 +99,18 @@ public class ConfirmAppointmentFragment extends Fragment {
 
                 appointmentRef.setValue(appointment)
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(getContext(), "✅ התור נשמר בהצלחה!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), " התור נשמר בהצלחה!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                             requireActivity().finish();
                         })
-                        .addOnFailureListener(e -> Toast.makeText(getContext(), "❌ שגיאה בשמירת התור", Toast.LENGTH_SHORT).show());
+                        .addOnFailureListener(e -> Toast.makeText(getContext(), " שגיאה בשמירת התור", Toast.LENGTH_SHORT).show());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "⚠ שגיאה בגישה ל-Firebase.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " שגיאה בגישה ל-Firebase.", Toast.LENGTH_SHORT).show();
             }
         });
     }

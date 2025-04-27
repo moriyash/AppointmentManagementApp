@@ -10,7 +10,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- כותרת העמוד -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,7 +19,6 @@
             android:gravity="center"
             android:paddingBottom="16dp"/>
 
-        <!-- שדות הזנת ביקורת -->
         <EditText
             android:id="@+id/edt_reviewer_name"
             android:layout_width="match_parent"
@@ -61,14 +59,13 @@
             android:id="@+id/btn_back_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🔙 חזור"
+            android:text=" חזור"
             android:textSize="16sp"
             android:textColor="@color/white"
             android:backgroundTint="@color/black"
             android:padding="12dp"
             android:layout_marginTop="16dp"/>
 
-        <!-- מחוון טעינה -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
@@ -77,7 +74,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"/>
 
-        <!-- רשימת ביקורות -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_reviews"
             android:layout_width="match_parent"

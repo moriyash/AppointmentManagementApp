@@ -61,7 +61,7 @@ public class SelectDateFragment extends Fragment {
             }
             selectedTime = timeSpinner.getSelectedItem().toString();
 
-            if (selectedTime.contains("⛔")) {
+            if (selectedTime.contains("blocked")) {
                 Toast.makeText(getContext(), "השעה שבחרת כבר תפוסה", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -92,39 +92,34 @@ public class SelectDateFragment extends Fragment {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view, selectedYear, selectedMonth, selectedDay) -> {
             if (isSaturday(selectedYear, selectedMonth, selectedDay)) {
-                Toast.makeText(getContext(), "🚫 אין קביעת תורים בשבת. אנא בחר יום אחר.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " אין קביעת תורים בשבת. אנא בחר יום אחר.", Toast.LENGTH_SHORT).show();
             } else {
                 selectedDate = formatDate(selectedDay, selectedMonth + 1, selectedYear);
 
-                // ✅ קריאה לפיירבייס לבדוק אם יש שעות מותאמות אישית
                 workdaysReference.child(selectedDate).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String workingHours;
                         String dayType = snapshot.child("type").getValue(String.class);
 
-                        // 🔹 אם היום מסומן כחופש/מחלה - נבטל קביעת תור!
                         if (dayType != null && (dayType.equals("יום חופשה") || dayType.equals("יום מחלה"))) {
-                            Toast.makeText(getContext(), "🚫 יום זה חסום על ידי המנהל. בחר תאריך אחר.", Toast.LENGTH_SHORT).show();
-                            selectedDate = ""; // איפוס הבחירה
+                            Toast.makeText(getContext(), " יום זה חסום על ידי המנהל. בחר תאריך אחר.", Toast.LENGTH_SHORT).show();
+                            selectedDate = "";
                             return;
                         }
 
-                        // 🔹 אם יש שעות בפיירבייס, נשתמש בהן
                         if (snapshot.exists() && snapshot.child("hours").exists()) {
                             workingHours = snapshot.child("hours").getValue(String.class);
                         } else {
-                            // 🔹 אם אין נתונים, נטען שעות ברירת מחדל
                             workingHours = getDefaultWorkingHours(selectedYear, selectedMonth, selectedDay);
                         }
 
-                        // ✅ טוען את השעות לספינר
                         loadAvailableTimes(selectedDate, workingHours);
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(getContext(), "⚠ שגיאה בטעינת שעות העבודה.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), " שגיאה בטעינת שעות העבודה.", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -138,7 +133,6 @@ public class SelectDateFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
 
-        // אם זה יום שישי, שעות העבודה קצרות יותר
         if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
             return "08:00 - 14:00";
         } else {
@@ -179,12 +173,12 @@ public class SelectDateFragment extends Fragment {
                         }
                     }
                 }
-                Toast.makeText(getContext(), "📅 שעות העבודה עודכנו אצל הלקוחות!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " שעות העבודה עודכנו אצל הלקוחות!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "⚠ שגיאה בעדכון שעות העבודה ללקוחות.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " שגיאה בעדכון שעות העבודה ללקוחות.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -206,7 +200,7 @@ public class SelectDateFragment extends Fragment {
 
         for (String time : availableTimes) {
             if (bookedTimes.contains(time)) {
-                displayTimes.add(time + " ⛔ תפוס");
+                displayTimes.add(time + "  תפוס");
             } else {
                 displayTimes.add(time);
             }
@@ -237,7 +231,7 @@ public class SelectDateFragment extends Fragment {
                 }
 
                 if (isTimeTaken) {
-                    Toast.makeText(getContext(), "⛔ השעה שבחרת כבר תפוסה!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), " השעה שבחרת כבר תפוסה!", Toast.LENGTH_SHORT).show();
                 } else {
                     Bundle bundle = new Bundle();
                     bundle.putString("selectedDate", selectedDate);
@@ -250,7 +244,7 @@ public class SelectDateFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "⚠ שגיאה בבדיקת זמינות השעה.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), " שגיאה בבדיקת זמינות השעה.", Toast.LENGTH_SHORT).show();
             }
         });
     }

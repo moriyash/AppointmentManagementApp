@@ -48,7 +48,6 @@ public class ReviewFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // קבלת מספר הטלפון מה־Bundle
         if (getArguments() != null) {
             userPhoneNumber = getArguments().getString("phoneNumber", "");
         }
@@ -76,7 +75,6 @@ public class ReviewFragment extends Fragment {
         recyclerViewReviews.setAdapter(reviewAdapter);
 
         btnSubmitReview.setOnClickListener(v -> submitReview());
-        // הוספת מאזין לכפתור חזור
         btnBackMain.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
 
         loadReviews();

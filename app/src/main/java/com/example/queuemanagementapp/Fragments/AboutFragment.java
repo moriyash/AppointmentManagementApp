@@ -28,9 +28,9 @@ public class AboutFragment extends Fragment {
        btnBackMain.setOnClickListener(v -> {
             // יצירת Intent לעמוד הראשי (MainActivity)
             Intent intent = new Intent(getActivity(), MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  // לוודא שכל ה-Activities הקודמים ייסגרו
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent); // הפעלת ה-Activity
-            requireActivity().finish(); // מסיים את ה-Activity הנוכחי ומחזיר לעמוד הראשי
+            requireActivity().finish();
         });
 
         return view;
